@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="hero-section position-relative overflow-hidden text-center text-white">
+    <div class="hero-overlay d-flex align-items-center justify-content-center">
+        <div class="container hero-content">
+            <h1 class="display-3 fw-black italic text-uppercase">Suplementos UANL</h1>
+            <p class="lead fw-light">Potencia tu rendimiento con lo mejor en suplementación.</p>
+            <a asp-controller="Home" asp-action="Catalogo" class="btn btn-danger btn-lg rounded-0 fw-bold px-5 mt-3">
+                EXPLORAR PRODUCTOS
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5 pt-4">
+
+    <div class="text-center mb-5">
+        <h3 class="fw-bold text-uppercase italic section-title">Más Vendidos</h3>
+        <div class="underline mx-auto"></div>
+    </div>
+
+    <div class="row g-2 mb-4">
+        <div class="col-6 col-md-3">
+            <a asp-action="Proteinas" class="category-card-mini">
+                <img src="https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=300" class="img-fluid" alt="Proteinas">
+                <div class="mini-overlay"><span class="mini-text">Proteínas</span></div>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-action="Catalogo" class="category-card-mini">
+                <img src="https://images.unsplash.com/photo-1546483875-ad9014c88eba?w=300" class="img-fluid" alt="Creatina">
+                <div class="mini-overlay"><span class="mini-text">Creatinas</span></div>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-action="Catalogo" class="category-card-mini">
+                <img src="https://images.unsplash.com/photo-1579722820308-d74e5719d23e?w=300" class="img-fluid" alt="BCAA">
+                <div class="mini-overlay"><span class="mini-text">Aminoácidos</span></div>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-action="Catalogo" class="category-card-mini">
+                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300" class="img-fluid" alt="Pre-entreno">
+                <div class="mini-overlay"><span class="mini-text">Pre-Workouts</span></div>
+            </a>
+        </div>
+    </div>
+
+    <div class="text-center mb-5 mt-4">
+        <a asp-action="Catalogo" class="btn btn-dark rounded-0 px-4 fw-bold btn-sm">VER TODOS</a>
+    </div>
+
+    <hr class="my-5 border-secondary opacity-25">
+
+    <div class="text-center mb-5">
+        <h3 class="fw-bold text-uppercase italic section-title">Nuevos Productos</h3>
+        <div class="underline mx-auto"></div>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-5 g-4">
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm product-card">
+                <img src="https://via.placeholder.com/200x200" class="card-img-top p-3" alt="...">
+                <div class="card-body text-center">
+                    <h6 class="card-title fw-bold small mb-1">C4 ORIGINAL</h6>
+                    <p class="text-danger fw-bold mb-3">$750.00</p>
+                    <a asp-action="Catalogo" class="btn btn-outline-dark btn-sm rounded-0 w-100 fw-bold">VER DETALLE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5 mb-5">
+        <a asp-action="Nuevo" class="btn btn-dark rounded-0 px-4 fw-bold btn-sm text-uppercase">Nuevos Productos</a>
+    </div>
+
+</div>

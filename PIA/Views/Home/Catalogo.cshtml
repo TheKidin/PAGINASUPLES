@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Catálogo";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center fw-bold text-uppercase mb-4">Catálogo</h2>
+    <div class="row g-1">
+        <div class="col-6 col-md-3">
+            <a asp-action="Catalogo" asp-route-categoria="Aminoacidos" class="category-card">
+                <div class="category-overlay">
+                    <span class="category-text">Aminoácidos</span>
+                </div>
+                <img src="/img/cat-amino.jpg" class="img-fluid" alt="Aminoácidos">
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <a asp-action="Proteinas" asp-route-categoria="Proteinas" class="category-card">
+                <div class="category-overlay">
+                    <span class="category-text">Proteínas</span>
+                </div>
+                <img src="/img/cat-proteina.jpg" class="img-fluid" alt="Proteínas">
+            </a>
+        </div>
+
+    </div>
+</div>

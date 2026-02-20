@@ -1,0 +1,223 @@
+/* =========================================
+   1. VARIABLES Y CONFIGURACIÓN BASE
+   ========================================= */
+:root {
+    --accent-color: #e63946; /* Rojo deportivo */
+    --main-black: #0a0a0a;
+}
+
+.fw-black {
+    font-weight: 900;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.underline {
+    width: 60px;
+    height: 4px;
+    background-color: #dc3545;
+}
+
+/* =========================================
+   2. NAVEGACIÓN (NAVBAR)
+   ========================================= */
+.bg-black {
+    background-color: var(--main-black) !important;
+}
+
+.border-bottom-accent {
+    border-bottom: 4px solid var(--accent-color);
+}
+
+.navbar-nav .nav-link {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 0.5rem 1.2rem !important;
+    color: #ffffff !important;
+    transition: color 0.3s;
+}
+
+.custom-link:hover {
+    color: var(--accent-color) !important;
+}
+
+.dropdown-menu {
+    border-radius: 0;
+    border: 1px solid #333;
+}
+
+/* Redes Sociales */
+.social-icons i {
+    transition: transform 0.2s;
+}
+
+    .social-icons i:hover {
+        transform: scale(1.2);
+        color: var(--accent-color);
+    }
+
+/* =========================================
+   3. SECCIÓN HERO (BIENVENIDA)
+   ========================================= */
+.hero-section {
+    height: 70vh;
+    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920');
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-overlay {
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================
+   4. PRODUCTOS (TARJETAS Y BOTONES)
+   ========================================= */
+.card-product {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    background-color: #f8f9fa;
+}
+
+    .card-product:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+.product-card {
+    transition: transform 0.3s;
+}
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+.card-img-custom {
+    padding: 1.5rem;
+    object-fit: contain;
+    height: 250px;
+}
+
+/* Botones y Etiquetas */
+.btn-buy {
+    background-color: #000;
+    color: #fff;
+    border-radius: 0;
+    font-weight: bold;
+}
+
+    .btn-buy:hover {
+        background-color: #333;
+        color: #ffc107;
+    }
+
+.btn-black-gym {
+    background-color: #000;
+    color: #fff;
+    border-radius: 0;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+    .btn-black-gym:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+.badge-category {
+    background-color: #ffc107;
+    color: #000;
+    font-weight: bold;
+}
+
+/* =========================================
+   5. CATEGORÍAS (CUADRÍCULAS)
+   ========================================= */
+.section-title {
+    letter-spacing: 2px;
+}
+
+/* Cuadros Grandes */
+.category-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+}
+
+    .category-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .category-card:hover img {
+        transform: scale(1.1);
+    }
+
+.category-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.category-text {
+    background-color: white;
+    color: black;
+    padding: 5px 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Mini Cards (Más Vendidos) */
+.category-card-mini {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    height: 180px;
+}
+
+    .category-card-mini img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .category-card-mini:hover img {
+        transform: scale(1.1);
+    }
+
+.mini-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-text {
+    background: white;
+    color: black;
+    padding: 3px 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+}

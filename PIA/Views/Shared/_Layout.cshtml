@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Suplementos UANL</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="~/css/Tienda-Gym.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PIA.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-light">
+    <header>
+        <div class="top-bar bg-black text-white py-1">
+            <div class="container d-flex justify-content-between align-items-center">
+                <small class="text-uppercase fw-lighter" style="font-size: 0.7rem;">⚡ Envíos gratis en compras mayores a $999</small>
+                <div class="social-icons">
+                    <a href="#" class="text-white ms-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white ms-3"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white ms-3"><i class="bi bi-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom-accent py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <span class="fs-3 fw-bold italic text-white">SM</span>
+                    <span class="fs-3 fw-bold italic text-danger">UANL</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto text-uppercase">
+                        <li class="nav-item">
+                            <a class="nav-link custom-link" asp-controller="Home" asp-action="Index">Inicio</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link custom-link" asp-controller="Home" asp-action="Catalogo">
+                                Productos 
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link custom-link" href="#">Ropa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link custom-link" href="#">Marcas</a>
+                        </li>
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-4 text-white">
+                        <a href="#" class="text-white hover-danger"><i class="bi bi-search fs-5"></i></a>
+                        <a href="#" class="text-white hover-danger"><i class="bi bi-person fs-4"></i></a>
+                        <a href="#" class="text-white position-relative hover-danger">
+                            <i class="bi bi-bag fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid p-0">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-black text-white pt-5 pb-3 mt-5 border-top border-danger border-4">
+        <div class="container">
+            <div class="row text-center text-md-start">
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold text-danger italic">GYM CORE</h5>
+                    <p class="small text-secondary">La mejor suplementación para llevar tu cuerpo al siguiente nivel.</p>
+                </div>
+                <div class="col-md-4 mb-4 text-center">
+                    <h6 class="text-uppercase fw-bold">Links Rápidos</h6>
+                    <ul class="list-unstyled">
+                        <li><a asp-action="Catalogo" class="text-secondary text-decoration-none small">Catálogo</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none small">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4 text-center text-md-end">
+                    <h6 class="text-uppercase fw-bold">Síguenos</h6>
+                    <div class="fs-4">
+                        <i class="bi bi-instagram mx-2"></i>
+                        <i class="bi bi-facebook mx-2"></i>
+                        <i class="bi bi-tiktok mx-2"></i>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center">
+                <p class="small text-secondary mb-0">&copy; 2026 - GYM CORE - Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
