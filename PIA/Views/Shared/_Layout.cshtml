@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -43,10 +47,18 @@
 
                         <li class="nav-item">
                             <a class="nav-link custom-link" asp-controller="Home" asp-action="Catalogo">
-                                Productos 
+                                Productos
                             </a>
                         </li>
 
+                        @if (SignInManager.IsSignedIn(User) && User.Identity?.Name == "SMUANL2026@hotmail.com")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link custom-link text-warning fw-bold" asp-controller="Productos" asp-action="Index">
+                                    <i class="bi bi-box-seam"></i> 1. PRODUCTOS
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link custom-link" href="#">Ropa</a>
                         </li>
@@ -57,7 +69,38 @@
 
                     <div class="d-flex align-items-center gap-4 text-white">
                         <a href="#" class="text-white hover-danger"><i class="bi bi-search fs-5"></i></a>
-                        <a href="#" class="text-white hover-danger"><i class="bi bi-person fs-4"></i></a>
+                        
+                        <div class="dropdown">
+                            <a href="#" class="text-white text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    <i class="bi bi-person-fill fs-4 text-danger hover-danger" style="cursor: pointer;"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person fs-4 hover-danger" style="cursor: pointer;"></i>
+                                }
+                            </a>
+                            
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark mt-3" aria-labelledby="userDropdown" style="border: 1px solid var(--accent-color);">
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    <li><a class="dropdown-item text-white" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="bi bi-person-badge"></i> Mi Perfil</a></li>
+                                    <li><hr class="dropdown-divider border-secondary"></li>
+                                    <li>
+                                        <form class="form-inline m-0 p-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                            <button type="submit" class="dropdown-item text-danger fw-bold"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</button>
+                                        </form>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item text-white" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión</a></li>
+                                    <li><a class="dropdown-item text-white" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-person-plus"></i> Crear Cuenta</a></li>
+                                }
+                            </ul>
+                        </div>
+
                         <a href="#" class="text-white position-relative hover-danger">
                             <i class="bi bi-bag fs-5"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">0</span>
@@ -78,7 +121,7 @@
         <div class="container">
             <div class="row text-center text-md-start">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-danger italic">GYM CORE</h5>
+                    <h5 class="fw-bold text-danger italic">SMUANL</h5>
                     <p class="small text-secondary">La mejor suplementación para llevar tu cuerpo al siguiente nivel.</p>
                 </div>
                 <div class="col-md-4 mb-4 text-center">
@@ -99,7 +142,7 @@
             </div>
             <hr class="bg-secondary">
             <div class="text-center">
-                <p class="small text-secondary mb-0">&copy; 2026 - GYM CORE - Todos los derechos reservados.</p>
+                <p class="small text-secondary mb-0">&copy; 2026 - SMUANL - Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<PIA.Models.Producto>
+
+@{
     ViewData["Title"] = "Inicio";
 }
 
@@ -22,30 +24,34 @@
     </div>
 
     <div class="row g-2 mb-4">
+        
         <div class="col-6 col-md-3">
             <a asp-action="Proteinas" class="category-card-mini">
-                <img src="https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=300" class="img-fluid" alt="Proteinas">
+                <img src="~/imagenes/gold-standard-whey.jpg" class="img-fluid" alt="Proteinas">
                 <div class="mini-overlay"><span class="mini-text">Proteínas</span></div>
             </a>
         </div>
+
         <div class="col-6 col-md-3">
-            <a asp-action="Catalogo" class="category-card-mini">
-                <img src="https://images.unsplash.com/photo-1546483875-ad9014c88eba?w=300" class="img-fluid" alt="Creatina">
-                <div class="mini-overlay"><span class="mini-text">Creatinas</span></div>
-            </a>
-        </div>
-        <div class="col-6 col-md-3">
-            <a asp-action="Catalogo" class="category-card-mini">
-                <img src="https://images.unsplash.com/photo-1579722820308-d74e5719d23e?w=300" class="img-fluid" alt="BCAA">
+            <a asp-action="Aminoacidos" class="category-card-mini">
+                <img src="~/imagenes/aminopia.png" class="img-fluid" alt="Aminoacidos">
                 <div class="mini-overlay"><span class="mini-text">Aminoácidos</span></div>
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-action="Catalogo" class="category-card-mini">
-                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300" class="img-fluid" alt="Pre-entreno">
+                <a asp-action="Creatinas" class="category-card-mini">
+                <img src="~/imagenes/creatinaDragon200.png" class="img-fluid" alt="Creatinas">
+                <div class="mini-overlay"><span class="mini-text">Creatinas</span></div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3">
+                        <a asp-action="PreWorkouts" class="category-card-mini">
+                <img src="~/imagenes/prefresaK.png" class="img-fluid" alt="Pre-entreno">
                 <div class="mini-overlay"><span class="mini-text">Pre-Workouts</span></div>
             </a>
         </div>
+
     </div>
 
     <div class="text-center mb-5 mt-4">

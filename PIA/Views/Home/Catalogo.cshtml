@@ -6,11 +6,11 @@
     <h2 class="text-center fw-bold text-uppercase mb-4">Catálogo</h2>
     <div class="row g-1">
         <div class="col-6 col-md-3">
-            <a asp-action="Catalogo" asp-route-categoria="Aminoacidos" class="category-card">
+            <a asp-action="Aminoacidos" asp-route-categoria="Aminoacidos" class="category-card">
                 <div class="category-overlay">
                     <span class="category-text">Aminoácidos</span>
                 </div>
-                <img src="/img/cat-amino.jpg" class="img-fluid" alt="Aminoácidos">
+                <img src="/imagenes/aminopia.png" class="img-fluid" alt="Aminoácidos">
             </a>
         </div>
 
@@ -19,17 +19,25 @@
                 <div class="category-overlay">
                     <span class="category-text">Proteínas</span>
                 </div>
-                <img src="/img/cat-proteina.jpg" class="img-fluid" alt="Proteínas">
+                <img src="~/imagenes/gold-standard-whey.jpg" class="img-fluid" alt="Proteínas">
             </a>
         </div>
 
          <div class="col-6 col-md-3">
-            <a asp-action="Creatinas" asp-route-categoria="Proteinas" class="category-card">
+            <a asp-action="Creatinas" asp-route-categoria="Creatinas" class="category-card">
                 <div class="category-overlay">
                     <span class="category-text">Creatinas</span>
                 </div>
-                <img src="/img/cat-proteina.jpg" class="img-fluid" alt="Proteínas">
+                <img src="~/imagenes/creatinaDragon200.png" class="img-fluid" alt="creatinas">
             </a>
         </div>
+         <div class="col-6 col-md-3">
+                    <a asp-action="PreWorkouts" asp-route-categoria="Pre-Workouts" class="category-card">
+                 <div class="category-overlay">
+                     <span class="category-text">Pre-Entrenos</span>
+                     </div>
+                        <img src="~/imagenes/prefresaK.png" class="img-fluid" alt="Pre-Workouts">
+                 </a>
+             </div>
     </div>
 </div>

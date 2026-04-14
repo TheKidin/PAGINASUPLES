@@ -17,7 +17,7 @@
 .underline {
     width: 60px;
     height: 4px;
-    background-color: #dc3545;
+    background-color: var(--accent-color);
 }
 
 /* =========================================
@@ -123,7 +123,7 @@
 }
 
     .btn-black-gym:hover {
-        background-color: #dc3545;
+        background-color: var(--accent-color);
         color: white;
     }
 
@@ -220,4 +220,132 @@
     font-weight: bold;
     text-transform: uppercase;
     font-size: 0.7rem;
+}
+
+/* =========================================
+   6. CUENTAS E INICIO DE SESIÓN (IDENTITY)
+   ========================================= */
+
+/* 1. Centrar la fila SOLO en las pantallas de cuenta */
+main .row:has(#account), main .row:has(#registerForm) {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100%;
+}
+
+    /* 2. Ocultar la columna 2 ("Use another service...") SOLO en pantallas de cuenta */
+    main .row:has(#account) > div:nth-child(2), main .row:has(#registerForm) > div:nth-child(2) {
+        display: none !important;
+    }
+
+    /* 3. Ajustar tamaño de la caja SOLO en pantallas de cuenta */
+    main .row:has(#account) > div:nth-child(1), main .row:has(#registerForm) > div:nth-child(1) {
+        width: 100% !important;
+        max-width: 450px !important;
+        flex: 0 0 auto !important;
+    }
+
+/* 4. Ocultar los títulos sueltos horribles de Microsoft ("Log in", "Register", etc) afuera de las cajas */
+main > h1, main > h2, main > hr {
+    display: none !important;
+}
+
+/* Contenedor oscuro para TODOS los formularios (Login, Registro, Olvidé Contraseña) */
+#account, #registerForm, .gym-form {
+    background-color: var(--main-black);
+    padding: 35px;
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    color: white;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+    /* Títulos DENTRO del formulario */
+    #account h2, #registerForm h2, .gym-title {
+        color: var(--accent-color);
+        font-weight: 900;
+        font-style: italic;
+        text-transform: uppercase;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+        font-size: 1.5rem;
+    }
+
+    /* Ocultamos los textos genéricos de Microsoft que estorban */
+    #account h3, #registerForm h3 {
+        display: none;
+    }
+
+/* Ocultar el botón de "Reenviar correo" porque no lo usamos en el PIA */
+#resend-confirmation {
+    display: none !important;
+}
+
+/* Etiquetas de los inputs */
+#account .form-label, #registerForm .form-label, .gym-form .form-label {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #ccc;
+}
+
+/* Cajas de texto (Inputs) */
+#account .form-control, #registerForm .form-control, .gym-form .form-control {
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+}
+
+    /* Cuando le das clic a la caja de texto */
+    #account .form-control:focus, #registerForm .form-control:focus, .gym-form .form-control:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 8px rgba(230, 57, 70, 0.6);
+        background-color: #222;
+    }
+
+/* Botón principal (Iniciar sesión / Registrar / Recuperar) */
+#account .btn-primary, #registerForm .btn-primary, .gym-form .btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 1px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+    #account .btn-primary:hover, #registerForm .btn-primary:hover, .gym-form .btn-primary:hover {
+        background-color: #b02a37;
+        border-color: #b02a37;
+        transform: translateY(-2px);
+    }
+
+/* Enlaces (Recuperar contraseña, crear cuenta) */
+#account a, #registerForm a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+    display: block;
+    margin-top: 8px;
+}
+
+    #account a:hover, #registerForm a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+/* Ajuste del checkbox "Recordarme" */
+.form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
 }

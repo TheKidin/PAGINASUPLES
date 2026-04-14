@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<PIA.Models.Producto>
+
+@{
     ViewData["Title"] = "Proteínas";
 }
 
@@ -51,246 +53,34 @@
         <main class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold text-uppercase italic mb-0">Proteínas</h2>
-                <span class="text-muted small">Mostrando 20 productos</span>
+                <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) productos</span>
             </div>
 
             <div class="row row-cols-1 row-cols-md-3 g-4">
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <div class="position-absolute p-2"><span class="badge bg-danger">Popular</span></div>
-                        <img src="https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=400" class="card-img-top p-4" alt="Proteína">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Optimum Nutrition</p>
-                            <h6 class="fw-bold">Gold Standard Whey 5lb</h6>
-                            <div class="text-warning mb-2" style="font-size: 0.8rem;">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
-                            </div>
-                            <h5 class="text-danger fw-bold">$1,299.00</h5>
+                
+                @if (Model != null)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <div class="col">
+                            <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none text-dark">
+                                <div class="card h-100 border-0 shadow-sm product-card-hover" style="transition: transform 0.3s; cursor: pointer;">
+                                    <img src="~/imagenes/gold-standard-whey.jpg" class="img-fluid" alt="Proteinas">
+                                    <div class="card-body text-center">
+                                        <p class="text-muted small mb-1 text-uppercase">@item.Marca</p>
+                                        <h6 class="fw-bold text-uppercase">@item.Nombre</h6>
+                                        
+                                        <div class="text-warning mb-2" style="font-size: 0.8rem;">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                                        </div>
+                                        
+                                        <h5 class="text-danger fw-bold">$@item.Precio.ToString("N2")</h5>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=ISO100" class="card-img-top p-4" alt="Proteína">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Dymatize</p>
-                            <h6 class="fw-bold">ISO 100 Hidrolizada</h6>
-                            <div class="text-warning mb-2" style="font-size: 0.8rem;">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                            </div>
-                            <h5 class="text-danger fw-bold">$1,550.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=Rule1" class="card-img-top p-4" alt="Proteína">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Rule 1 Proteins</p>
-                            <h6 class="fw-bold">R1 Protein Isolate</h6>
-                            <div class="text-warning mb-2" style="font-size: 0.8rem;">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                            </div>
-                            <h5 class="text-danger fw-bold">$1,180.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="col">
-                        <div class="card h-100 border-0 shadow-sm product-card-hover">
-                            <img src="https://via.placeholder.com/400x400?text=NitroTech" class="card-img-top p-4">
-                            <div class="card-body text-center">
-                                <p class="text-muted small mb-1">Muscletech</p>
-                                <h6 class="fw-bold">Nitro-Tech Performance</h6>
-                                <h5 class="text-danger fw-bold">$1,050.00</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <div class="position-absolute p-2"><span class="badge bg-success">Vegana</span></div>
-                        <img src="https://via.placeholder.com/400x400?text=Falcon" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Birdman</p>
-                            <h6 class="fw-bold">Falcon Performance</h6>
-                            <h5 class="text-danger fw-bold">$980.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <div class="position-absolute p-2"><span class="badge bg-dark">Beef</span></div>
-                        <img src="https://via.placeholder.com/400x400?text=Carnivor" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">MuscleMeds</p>
-                            <h6 class="fw-bold">Carnivor Beef Protein</h6>
-                            <h5 class="text-danger fw-bold">$920.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=Syntha6" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">BSN</p>
-                            <h6 class="fw-bold">Syntha-6 Edge</h6>
-                            <h5 class="text-danger fw-bold">$1,150.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=Isopure" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Nature's Best</p>
-                            <h6 class="fw-bold">Isopure Zero Carb</h6>
-                            <h5 class="text-danger fw-bold">$1,450.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=EliteWhey" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Dymatize</p>
-                            <h6 class="fw-bold">Elite 100% Whey</h6>
-                            <h5 class="text-danger fw-bold">$1,250.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=Combat" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">MusclePharm</p>
-                            <h6 class="fw-bold">Combat Powder 5lb</h6>
-                            <h5 class="text-danger fw-bold">$1,100.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=MutantWhey" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Mutant</p>
-                            <h6 class="fw-bold">Mutant Whey 5lb</h6>
-                            <h5 class="text-danger fw-bold">$1,020.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=WheyHD" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">BPI Sports</p>
-                            <h6 class="fw-bold">Whey HD 5lb</h6>
-                            <h5 class="text-danger fw-bold">$990.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <div class="position-absolute p-2"><span class="badge bg-info">Gainer</span></div>
-                        <img src="https://via.placeholder.com/400x400?text=CarnivorMass" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">MuscleMeds</p>
-                            <h6 class="fw-bold">Carnivor Mass 6lb</h6>
-                            <h5 class="text-danger fw-bold">$1,380.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=ISOSurge" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Mutant</p>
-                            <h6 class="fw-bold">ISO Surge Premium</h6>
-                            <h5 class="text-danger fw-bold">$1,490.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=HydroWhey" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Optimum Nutrition</p>
-                            <h6 class="fw-bold">Platinum Hydrowhey</h6>
-                            <h5 class="text-danger fw-bold">$1,790.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=MyoVector" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">MyoVector</p>
-                            <h6 class="fw-bold">Whey Protein 5lb</h6>
-                            <h5 class="text-danger fw-bold">$1,150.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=ON+Isolate" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Optimum Nutrition</p>
-                            <h6 class="fw-bold">Isolate Gold Standard</h6>
-                            <h5 class="text-danger fw-bold">$1,450.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <div class="position-absolute p-2"><span class="badge bg-secondary">Lenta absorción</span></div>
-                        <img src="https://via.placeholder.com/400x400?text=ON+Casein" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Optimum Nutrition</p>
-                            <h6 class="fw-bold">Gold Standard Casein</h6>
-                            <h5 class="text-danger fw-bold">$1,390.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=Ghost" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Ghost</p>
-                            <h6 class="fw-bold">Ghost Whey Limited</h6>
-                            <h5 class="text-danger fw-bold">$980.00</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm product-card-hover">
-                        <img src="https://via.placeholder.com/400x400?text=Raw+Isolate" class="card-img-top p-4">
-                        <div class="card-body text-center">
-                            <p class="text-muted small mb-1">Raw Nutrition</p>
-                            <h6 class="fw-bold">Whey Isolate CBUM</h6>
-                            <h5 class="text-danger fw-bold">$1,650.00</h5>
-                        </div>
-                    </div>
-                </div>
+                    }
+                }
 
             </div>
         </main>

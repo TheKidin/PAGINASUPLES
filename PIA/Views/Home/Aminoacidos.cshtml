@@ -1,0 +1,96 @@
+﻿@model IEnumerable<PIA.Models.Producto>
+
+@{
+    ViewData["Title"] = "Aminoácidos";
+}
+
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-dark">Inicio</a></li>
+            <li class="breadcrumb-item"><a asp-action="Catalogo" class="text-dark">Productos</a></li>
+            <li class="breadcrumb-item active text-danger fw-bold" aria-current="page">Aminoácidos</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <aside class="col-md-3 mb-4">
+            <div class="card border-0 shadow-sm p-3 bg-white">
+                <h5 class="fw-bold mb-3 text-uppercase" style="letter-spacing: 1px;">Filtros</h5>
+
+                <div class="filter-group mb-4">
+                    <h6 class="fw-bold small">TIPO DE AMINOÁCIDO</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="bcaa">
+                        <label class="form-check-label small" for="bcaa">BCAAs (Ramificados)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="eaa">
+                        <label class="form-check-label small" for="eaa">EAAs (Esenciales)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="glutamina">
+                        <label class="form-check-label small" for="glutamina">Glutamina</label>
+                    </div>
+                </div>
+
+                <div class="filter-group mb-4">
+                    <h6 class="fw-bold small">MARCA</h6>
+                    <select class="form-select form-select-sm">
+                        <option selected>Todas las marcas</option>
+                        <option>Xtend</option>
+                        <option>Mutant</option>
+                        <option>BSN</option>
+                        <option>Optimum Nutrition</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-danger btn-sm w-100 fw-bold">APLICAR FILTROS</button>
+            </div>
+        </aside>
+
+        <main class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-uppercase italic mb-0">Aminoácidos</h2>
+                <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) productos</span>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <div class="col">
+                            <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none text-dark">
+                                <div class="card h-100 border-0 shadow-sm product-card-hover" style="transition: transform 0.3s; cursor: pointer;">
+                                    
+                                    <img src="~/imagenes/aminopia.png" class="card-img-top p-4" alt="@item.Nombre" style="height: 250px; object-fit: contain;">
+                                    
+                                    <div class="card-body text-center">
+                                        <p class="text-muted small mb-1 text-uppercase">@item.Marca</p>
+                                        <h6 class="fw-bold text-uppercase">@item.Nombre</h6>
+                                        
+                                        <div class="text-warning mb-2" style="font-size: 0.8rem;">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                                        </div>
+                                        
+                                        <h5 class="text-danger fw-bold">$@item.Precio.ToString("N2")</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-center mt-5">
+                        <h5 class="text-muted">Aún no hay aminoácidos registrados.</h5>
+                        <p>Ve a tu panel de administrador y registra un producto que incluya la palabra "Amino" o "BCAA".</p>
+                    </div>
+                }
+
+            </div>
+        </main>
+    </div>
+</div>
