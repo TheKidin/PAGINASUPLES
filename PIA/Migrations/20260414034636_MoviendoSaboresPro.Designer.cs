@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIA.Data;
 
@@ -10,9 +11,11 @@ using PIA.Data;
 namespace PIA.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260414034636_MoviendoSaboresPro")]
+    partial class MoviendoSaboresPro
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
@@ -222,16 +225,16 @@ namespace PIA.Migrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("UsuarioId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("VarianteProductoId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VarianteProductoId");
+                    b.HasIndex("ProductoId");
 
                     b.ToTable("ItemsCarrito");
                 });
@@ -337,13 +340,13 @@ namespace PIA.Migrations
 
             modelBuilder.Entity("PIA.Models.ItemCarrito", b =>
                 {
-                    b.HasOne("PIA.Models.VarianteProducto", "Variante")
+                    b.HasOne("PIA.Models.Producto", "Producto")
                         .WithMany()
-                        .HasForeignKey("VarianteProductoId")
+                        .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Variante");
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("PIA.Models.VarianteProducto", b =>

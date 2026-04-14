@@ -3,11 +3,15 @@
     public class ItemCarrito
     {
         public int Id { get; set; }
-        public string UsuarioId { get; set; }
+
+        // La conexión al sabor exacto que el cliente eligió
+        public int VarianteProductoId { get; set; }
+        public VarianteProducto? Variante { get; set; }
+
+        // ¿Cuántos botes quiere llevarse?
         public int Cantidad { get; set; }
 
-        // Lo cambiamos para que apunte directo al Producto (que ya tiene el sabor adentro)
-        public int ProductoId { get; set; }
-        public Producto Producto { get; set; }
+        // El ID del cliente (para que tu carrito no se mezcle con el mío)
+        public string UsuarioId { get; set; } = string.Empty;
     }
 }

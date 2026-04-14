@@ -2,52 +2,122 @@
 
 @{
     ViewData["Title"] = Model.Nombre;
+    
+    // Sumamos el stock de todos los sabores para saber si hay producto en general
+    var totalStock = Model.Variantes != null ? Model.Variantes.Sum(v => v.Stock) : 0;
 }
 
 <div class="container mt-5 pt-5 mb-5">
     <div class="row align-items-center">
         
         <div class="col-md-6 text-center mb-4 mb-md-0">
-            <img src="https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" class="img-fluid rounded shadow-lg" alt="@Model.Nombre" style="max-height: 500px; object-fit: contain;">
+            <img src="@(string.IsNullOrEmpty(Model.ImagenUrl) ? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" : Model.ImagenUrl)" class="img-fluid rounded shadow-sm" alt="@Model.Nombre" style="max-height: 500px; object-fit: contain;">
         </div>
 
         <div class="col-md-6">
-            <h5 class="text-secondary text-uppercase tracking-wider">@Model.Marca</h5>
-            <h1 class="fw-black italic text-uppercase mb-3">@Model.Nombre</h1>
+            
+            <p class="text-muted fw-bold mb-1" style="letter-spacing: 1px; font-size: 0.9rem;">
+                @Model.Marca
+            </p>
+            <h1 class="fw-black italic text-uppercase mb-3" style="font-size: 2.5rem;">
+                @Model.Nombre
+            </h1>
             
             <h2 class="text-danger fw-bold mb-4">
                 $@Model.Precio.ToString("N2")
             </h2>
 
-            <div class="mb-4">
-                <span class="fw-bold">SABOR DISPONIBLE:</span>
-                <div class="mt-2">
-                    <span class="badge bg-dark border border-secondary p-2 fs-6">@Model.Sabor</span>
+            <div class="mb-4 bg-light p-3 rounded">
+                <span class="fw-bold text-uppercase flavor-title d-block mb-3">Sabor</span>
+                
+                <div class="flavor-selector">
+                    @if (Model.Variantes != null && Model.Variantes.Any())
+                    {
+                        @foreach (var variante in Model.Variantes)
+                        {
+                            if (variante.Stock > 0)
+                            {
+                                <button type="button" class="btn btn-flavor flavor-btn" data-id="@variante.Id" data-stock="@variante.Stock">
+                                    @variante.Sabor
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-flavor disabled" style="opacity: 0.5; text-decoration: line-through;" disabled>
+                                    @variante.Sabor
+                                </button>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted small">No hay sabores registrados aún.</span>
+                    }
                 </div>
             </div>
 
-            @if (Model.Stock > 0)
-            {
-                <p class="text-success small fw-bold"><i class="bi bi-check-circle-fill"></i> Disponible (@Model.Stock en bodega)</p>
-                <form action="#" method="post">
-                    <input type="hidden" name="productoId" value="@Model.Id" />
-                    <button type="submit" class="btn btn-danger btn-lg rounded-0 w-100 fw-bold py-3 text-uppercase shadow">
-                        <i class="bi bi-cart-plus"></i> AGREGAR AL CARRITO
-                    </button>
-                </form>
-            }
-            else
-            {
-                <p class="text-danger small fw-bold"><i class="bi bi-x-circle-fill"></i> Agotado temporalmente</p>
-                <button class="btn btn-secondary btn-lg rounded-0 w-100 fw-bold py-3 text-uppercase shadow" disabled>
-                    AGOTADO
-                </button>
-            }
+            <div class="mb-4" id="stockContainer">
+                @if (totalStock > 0)
+                {
+                    <span id="stockText" class="text-primary fw-bold small">
+                        <i class="bi bi-info-circle-fill me-1"></i> Selecciona un sabor para ver disponibilidad
+                    </span>
+                }
+                else
+                {
+                    <span class="text-danger fw-bold small">
+                        <i class="bi bi-x-circle-fill me-1"></i> Agotado temporalmente
+                    </span>
+                }
+            </div>
 
-            <hr class="my-4 border-secondary opacity-25">
+            <form asp-controller="Carrito" asp-action="Agregar" method="post" class="mb-4">
+                <input type="hidden" name="productoId" value="@Model.Id" />
+                <input type="hidden" name="varianteId" id="varianteSeleccionada" value="" required />
+                
+                <button type="submit" id="btnAgregarCarrito" class="btn btn-danger btn-lg rounded-1 w-100 fw-bold py-3 text-uppercase btn-cart-premium" disabled>
+                    <i class="bi bi-cart-plus me-2" style="font-size: 1.2rem;"></i> AGREGAR AL CARRITO
+                </button>
+            </form>
+
+            <hr class="border-secondary opacity-25 mb-3">
             <p class="text-muted small">
-                <i class="bi bi-truck"></i> Envío gratis a todo México en compras mayores a $999 MXN.
+                <i class="bi bi-truck me-2"></i> Envío gratis a todo México en compras mayores a $999 MXN.
             </p>
         </div>
-    </div>
-</div>
+
+        @* METER EL SCRIPT AQUÍ ABAJO, AL FINAL DEL ARCHIVO *@
+        @section Scripts {
+            <script>
+                        // Esperamos a que la página cargue
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Buscamos todos los botones de sabor y los textos que vamos a cambiar
+                            const botonesSabor = document.querySelectorAll('.flavor-btn');
+                            const textoStock = document.getElementById('stockText');
+                            const inputVariante = document.getElementById('varianteSeleccionada');
+                            const btnCarrito = document.getElementById('btnAgregarCarrito');
+
+                            botonesSabor.forEach(boton => {
+                                boton.addEventListener('click', function () {
+                                    // 1. Quitar la clase "active-flavor" de todos los botones
+                                    botonesSabor.forEach(b => b.classList.remove('active-flavor'));
+                    
+                                    // 2. Ponerle la clase "active-flavor" al botón que le dimos clic
+                                    this.classList.add('active-flavor');
+
+                                    // 3. Leer los datos ocultos del botón (Stock y ID)
+                                    const stockReal = this.getAttribute('data-stock');
+                                    const varianteId = this.getAttribute('data-id');
+
+                                    // 4. Actualizar el texto verde de abajo
+                                    textoStock.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> Disponible (${stockReal} en bodega)`;
+                                    textoStock.className = "text-success fw-bold small";
+
+                                    // 5. Guardar el ID en el formulario y prender el botón del carrito
+                                    inputVariante.value = varianteId;
+                                    btnCarrito.disabled = false;
+                                });
+                            });
+                        });
+            </script>
+        }

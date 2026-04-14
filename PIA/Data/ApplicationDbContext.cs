@@ -13,6 +13,9 @@ namespace PIA.Data
         }
 
         public DbSet<Producto> Productos { get; set; }
+        public DbSet<VarianteProducto> VariantesProducto { get; set; }
+
+        // NUEVA TABLA: El carrito de compras
         public DbSet<ItemCarrito> ItemsCarrito { get; set; }
     }
 }

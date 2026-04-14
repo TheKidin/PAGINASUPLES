@@ -71,7 +71,10 @@ namespace PIA.Controllers
                 return NotFound();
             }
 
-            var producto = await _context.Productos.FirstOrDefaultAsync(m => m.Id == id);
+            // Agregamos el Include para traernos la lista de sabores
+            var producto = await _context.Productos
+                                         .Include(p => p.Variantes)
+                                         .FirstOrDefaultAsync(m => m.Id == id);
 
             if (producto == null)
             {

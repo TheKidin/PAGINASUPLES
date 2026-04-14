@@ -349,3 +349,52 @@ main > h1, main > h2, main > hr {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
 }
+
+/* =========================================
+   DISEÑO DE DETALLES DEL PRODUCTO
+   ========================================= */
+
+/* Título de la sección de sabores */
+.flavor-title {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #6c757d;
+}
+
+/* Contenedor de los botones de sabor */
+.flavor-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Separación entre botones */
+}
+
+/* Botones de sabor (Cuadrados y limpios) */
+.btn-flavor {
+    border: 2px solid #dee2e6;
+    background-color: transparent;
+    color: #495057;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 8px 20px;
+    border-radius: 4px; /* Ligeramente redondeado o ponle 0 si los quieres 100% cuadrados */
+    transition: all 0.2s ease-in-out;
+}
+
+    /* Efecto al pasar el mouse o al estar seleccionado */
+    .btn-flavor:hover, .btn-flavor.active-flavor {
+        border-color: #dc3545; /* Borde rojo para que combine con tu precio/carrito */
+        color: #dc3545;
+        background-color: #fffafb;
+    }
+
+/* Botón de Agregar al carrito flotante */
+.btn-cart-premium {
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .btn-cart-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+    }
