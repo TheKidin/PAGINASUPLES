@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = Model.Nombre;
-    
     // Sumamos el stock de todos los sabores para saber si hay producto en general
     var totalStock = Model.Variantes != null ? Model.Variantes.Sum(v => v.Stock) : 0;
 }
@@ -11,24 +10,30 @@
     <div class="row align-items-center">
         
         <div class="col-md-6 text-center mb-4 mb-md-0">
-            <img src="@(string.IsNullOrEmpty(Model.ImagenUrl) ? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" : Model.ImagenUrl)" class="img-fluid rounded shadow-sm" alt="@Model.Nombre" style="max-height: 500px; object-fit: contain;">
+            <div style="background-color: #141414; border: 1px solid var(--border-color); padding: 3rem; position: relative;">
+                <span class="position-absolute top-0 start-0 bg-danger text-white fw-bold px-3 py-1" style="font-size: 0.7rem; letter-spacing: 2px;">STATUS: OPTIMAL</span>
+                
+                <img src="@(string.IsNullOrEmpty(Model.ImagenUrl) ? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" : Model.ImagenUrl)" class="img-fluid" alt="@Model.Nombre" style="max-height: 500px; object-fit: contain;">
+            </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 ps-md-5">
             
-            <p class="text-muted fw-bold mb-1" style="letter-spacing: 1px; font-size: 0.9rem;">
+            <p class="fw-bold mb-1 text-uppercase" style="letter-spacing: 3px; font-size: 0.8rem; color: var(--text-muted);">
                 @Model.Marca
             </p>
-            <h1 class="fw-black italic text-uppercase mb-3" style="font-size: 2.5rem;">
+            <h1 class="fw-black italic text-uppercase mb-3" style="font-size: 2.8rem; color: var(--text-main); letter-spacing: 1px;">
                 @Model.Nombre
             </h1>
             
-            <h2 class="text-danger fw-bold mb-4">
+            <h2 class="text-danger fw-bold mb-4" style="font-size: 2rem;">
                 $@Model.Precio.ToString("N2")
             </h2>
 
-            <div class="mb-4 bg-light p-3 rounded">
-                <span class="fw-bold text-uppercase flavor-title d-block mb-3">Sabor</span>
+            <div class="mb-4 p-4" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
+                <span class="fw-bold text-uppercase flavor-title d-block mb-3" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 2px;">
+                    Seleccionar Sabor
+                </span>
                 
                 <div class="flavor-selector">
                     @if (Model.Variantes != null && Model.Variantes.Any())
@@ -43,7 +48,7 @@
                             }
                             else
                             {
-                                <button type="button" class="btn btn-flavor disabled" style="opacity: 0.5; text-decoration: line-through;" disabled>
+                                <button type="button" class="btn btn-flavor disabled" style="opacity: 0.3; text-decoration: line-through; border-color: #333;" disabled>
                                     @variante.Sabor
                                 </button>
                             }
@@ -51,21 +56,21 @@
                     }
                     else
                     {
-                        <span class="text-muted small">No hay sabores registrados aún.</span>
+                        <span class="small" style="color: var(--text-muted);">No hay sabores registrados aún.</span>
                     }
                 </div>
             </div>
 
-            <div class="mb-4" id="stockContainer">
+            <div class="mb-4" id="stockContainer" style="height: 25px;">
                 @if (totalStock > 0)
                 {
-                    <span id="stockText" class="text-primary fw-bold small">
-                        <i class="bi bi-info-circle-fill me-1"></i> Selecciona un sabor para ver disponibilidad
+                    <span id="stockText" class="fw-bold small" style="color: var(--text-muted); letter-spacing: 1px;">
+                        <i class="bi bi-info-circle-fill me-1 text-danger"></i> SELECCIONA UNA VARIANTE PARA CONFIRMAR INVENTARIO
                     </span>
                 }
                 else
                 {
-                    <span class="text-danger fw-bold small">
+                    <span class="text-danger fw-bold small text-uppercase" style="letter-spacing: 1px;">
                         <i class="bi bi-x-circle-fill me-1"></i> Agotado temporalmente
                     </span>
                 }
@@ -75,49 +80,25 @@
                 <input type="hidden" name="productoId" value="@Model.Id" />
                 <input type="hidden" name="varianteId" id="varianteSeleccionada" value="" required />
                 
-                <button type="submit" id="btnAgregarCarrito" class="btn btn-danger btn-lg rounded-1 w-100 fw-bold py-3 text-uppercase btn-cart-premium" disabled>
-                    <i class="bi bi-cart-plus me-2" style="font-size: 1.2rem;"></i> AGREGAR AL CARRITO
+                <button type="submit" id="btnAgregarCarrito" class="btn btn-danger btn-lg rounded-0 w-100 fw-black py-3 text-uppercase btn-cart-premium" disabled style="letter-spacing: 2px;">
+                    <i class="bi bi-lightning-charge-fill me-2"></i> AGREGAR AL ARSENAL
                 </button>
             </form>
 
-            <hr class="border-secondary opacity-25 mb-3">
-            <p class="text-muted small">
-                <i class="bi bi-truck me-2"></i> Envío gratis a todo México en compras mayores a $999 MXN.
+            <hr class="mb-3" style="border-color: var(--border-color);">
+            
+            <p class="small text-uppercase" style="color: var(--text-muted); letter-spacing: 1px; font-size: 0.7rem;">
+                <i class="bi bi-shield-check text-danger me-2 fs-6"></i> Grado Clínico. Fórmula probada en laboratorio.
             </p>
         </div>
 
-        @* METER EL SCRIPT AQUÍ ABAJO, AL FINAL DEL ARCHIVO *@
-        @section Scripts {
-            <script>
-                        // Esperamos a que la página cargue
-                        document.addEventListener('DOMContentLoaded', function () {
-                            // Buscamos todos los botones de sabor y los textos que vamos a cambiar
-                            const botonesSabor = document.querySelectorAll('.flavor-btn');
-                            const textoStock = document.getElementById('stockText');
-                            const inputVariante = document.getElementById('varianteSeleccionada');
-                            const btnCarrito = document.getElementById('btnAgregarCarrito');
-
-                            botonesSabor.forEach(boton => {
-                                boton.addEventListener('click', function () {
-                                    // 1. Quitar la clase "active-flavor" de todos los botones
-                                    botonesSabor.forEach(b => b.classList.remove('active-flavor'));
-                    
-                                    // 2. Ponerle la clase "active-flavor" al botón que le dimos clic
-                                    this.classList.add('active-flavor');
-
-                                    // 3. Leer los datos ocultos del botón (Stock y ID)
-                                    const stockReal = this.getAttribute('data-stock');
-                                    const varianteId = this.getAttribute('data-id');
-
-                                    // 4. Actualizar el texto verde de abajo
-                                    textoStock.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> Disponible (${stockReal} en bodega)`;
-                                    textoStock.className = "text-success fw-bold small";
-
-                                    // 5. Guardar el ID en el formulario y prender el botón del carrito
-                                    inputVariante.value = varianteId;
-                                    btnCarrito.disabled = false;
-                                });
-                            });
-                        });
-            </script>
-        }
+    </div>
+</div>
+@* METER EL SCRIPT AQUÍ ABAJO, AL FINAL DEL ARCHIVO *@
+@section Scripts {
+    <script>
+        ...
+        ...
+    </script>
+}
+}
