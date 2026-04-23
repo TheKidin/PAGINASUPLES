@@ -1,0 +1,72 @@
+﻿@model IEnumerable<PIA.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Historial de Arsenal";
+}
+
+<div class="container mt-5 pt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="fw-black text-uppercase italic mb-0" style="color: var(--text-main); letter-spacing: 2px;">Arsenal Táctico Adquirido</h2>
+            <p class="text-danger fw-bold small text-uppercase mb-0" style="letter-spacing: 1px;">STATUS: HISTORIAL DE DESPLIEGUE</p>
+        </div>
+        <a asp-controller="Home" asp-action="Catalogo" class="btn btn-outline-light btn-sm rounded-0 fw-bold text-uppercase" style="letter-spacing: 1px;">
+            <i class="bi bi-arrow-left me-2"></i> Seguir Comprando
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="p-4" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped table-hover table-borderless align-middle mb-0">
+                            <thead style="border-bottom: 2px solid var(--accent-color);">
+                                <tr class="text-uppercase small" style="letter-spacing: 1px; color: var(--text-muted);">
+                                    <th scope="col" class="py-3">Número de Orden</th>
+                                    <th scope="col" class="py-3 text-center">Fecha</th>
+                                    <th scope="col" class="py-3 text-center">Estado</th>
+                                    <th scope="col" class="py-3 text-end">Total</th>
+                                    <th scope="col" class="py-3 text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var pedido in Model)
+                                {
+                                    <tr>
+                                        <td class="py-4 fw-black" style="color: var(--text-main); font-size: 0.9rem;">
+                                            #ORDEN-TÁCTICA-@pedido.Id.ToString("D4")
+                                        </td>
+                                        <td class="py-4 text-center">@pedido.Fecha.ToString("dd MMM, yyyy")</td>
+                                        <td class="py-4 text-center">
+                                            <span class="badge @(pedido.Estado == "Entregado" ? "bg-success" : "bg-warning text-dark") px-3 py-2 rounded-0 text-uppercase small" style="font-size: 0.65rem;">
+                                                @pedido.Estado
+                                            </span>
+                                        </td>
+                                        <td class="py-4 text-end text-danger fw-black fs-6">
+                                            $@pedido.Total.ToString("N2")
+                                        </td>
+                                        <td class="py-4 text-center">
+                                            <a asp-action="Detalles" asp-route-id="@pedido.Id" class="btn btn-sm btn-outline-light rounded-0 fw-bold" style="letter-spacing: 1px; font-size: 0.7rem;">
+                                                <i class="bi bi-eye-fill"></i> DETALLES DE MISIÓN
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5 my-3">
+                        <i class="bi bi-shield-x text-muted mb-3" style="font-size: 4rem;"></i>
+                        <h4 class="fw-black text-uppercase italic text-muted" style="letter-spacing: 2px;">SIN REGISTRO DE OPERACIONES</h4>
+                        <p class="text-muted small text-uppercase">Aún no has desplegado ningún armamento.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

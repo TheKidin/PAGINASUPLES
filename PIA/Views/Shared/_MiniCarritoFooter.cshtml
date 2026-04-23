@@ -1,0 +1,21 @@
+﻿@using System.Linq
+@model IEnumerable<PIA.Models.ItemCarrito>
+
+@{
+    decimal totalEstimado = Model != null ? Model.Sum(item => (item.Variante?.Producto?.Precio ?? 0) * item.Cantidad) : 0;
+}
+
+<div class="d-flex justify-content-between mb-2 text-uppercase fw-bold" style="color: var(--text-muted); letter-spacing: 1px; font-size: 0.75rem;">
+    <span>Subtotal Estimado</span>
+    <span class="text-white fw-black" style="font-size: 1rem;">
+        $@totalEstimado.ToString("N2")
+    </span>
+</div>
+                
+<div class="text-uppercase" style="color: var(--text-muted); font-size: 0.65rem; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+    Cálculo final de envío e impuestos se procesará en el pago.
+</div>
+
+<button class="btn btn-danger btn-lg rounded-0 w-100 fw-black py-3 mt-4 text-uppercase btn-cart-premium" style="letter-spacing: 2px;" @(totalEstimado == 0 ? "disabled" : "")>
+    <i class="bi bi-shield-lock-fill me-2 fs-6"></i> PROCEDER AL PAGO TÁCTICO
+</button>

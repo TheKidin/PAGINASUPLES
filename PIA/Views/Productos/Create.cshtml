@@ -1,44 +1,75 @@
 ﻿@model PIA.Models.Producto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Añadir Arsenal";
 }
 
-<h1>Create</h1>
+<div class="container mt-5 mb-5 pt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            
+            <div class="text-center mb-4">
+                <h2 class="fw-black text-uppercase text-white" style="font-style: italic; letter-spacing: 1px;">
+                    Añadir Nuevo Arsenal
+                </h2>
+                <p class="text-light opacity-75">Registra un nuevo suplemento en tu base de datos</p>
+            </div>
 
-<h4>Producto</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+            <div class="card bg-transparent border-secondary shadow-lg rounded-4 overflow-hidden">
+                <div class="card-body p-4 p-md-5">
+                    
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Nombre" class="form-label fw-bold text-uppercase text-light" style="font-size: 0.85rem; letter-spacing: 1px;"></label>
+                            <input asp-for="Nombre" class="form-control bg-dark text-white border-secondary" placeholder="Ej. Gold Standard Whey" required />
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Marca" class="form-label fw-bold text-uppercase text-light" style="font-size: 0.85rem; letter-spacing: 1px;"></label>
+                            <input asp-for="Marca" class="form-control bg-dark text-white border-secondary" placeholder="Ej. Optimun Nutrition" required />
+                            <span asp-validation-for="Marca" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-4 mb-md-0">
+                                <label asp-for="Precio" class="form-label fw-bold text-uppercase text-light" style="font-size: 0.85rem; letter-spacing: 1px;"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-dark text-light border-secondary">$</span>
+                                    <input asp-for="Precio" class="form-control bg-dark text-white border-secondary" type="number" step="0.01" required min="1" />
+                                </div>
+                                <span asp-validation-for="Precio" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ImagenUrl" class="form-label fw-bold text-uppercase text-light" style="font-size: 0.85rem; letter-spacing: 1px;">URL de Imagen</label>
+                                <input asp-for="ImagenUrl" class="form-control bg-dark text-white border-secondary" placeholder="https://..." />
+                                <span asp-validation-for="ImagenUrl" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-5 pt-2 border-top border-secondary" style="border-color: rgba(255,255,255,0.1) !important;">
+                            
+                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4 fw-bold" style="font-size: 0.9rem;">
+                                <i class="bi bi-arrow-left me-2"></i> CANCELAR
+                            </a>
+                            
+                            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm text-uppercase" style="font-size: 0.9rem; letter-spacing: 1px;">
+                                <i class="bi bi-plus-circle-fill me-2"></i> REGISTRAR
+                            </button>
+                            
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Marca" class="control-label"></label>
-                <input asp-for="Marca" class="form-control" />
-                <span asp-validation-for="Marca" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Precio" class="control-label"></label>
-                <input asp-for="Precio" class="form-control" />
-                <span asp-validation-for="Precio" class="text-danger"></span>
-            </div>         
-           
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

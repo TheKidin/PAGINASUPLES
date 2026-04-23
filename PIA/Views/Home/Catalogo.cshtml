@@ -1,43 +1,55 @@
 ﻿@{
-    ViewData["Title"] = "Catálogo";
+    ViewData["Title"] = "Catálogo - Arsenal";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center fw-bold text-uppercase mb-4">Catálogo</h2>
-    <div class="row g-1">
+<div class="container mt-5 mb-5 pt-4">
+    
+    <div class="text-center mb-5">
+        <h2 class="fw-black text-uppercase italic section-title" style="letter-spacing: 2px; color: var(--text-main);">Inventario</h2>
+        <div class="underline mx-auto mt-3"></div>
+    </div>
+
+    <div class="row g-3">
+        
         <div class="col-6 col-md-3">
-            <a asp-action="Aminoacidos" asp-route-categoria="Aminoacidos" class="category-card">
-                <div class="category-overlay">
-                    <span class="category-text">Aminoácidos</span>
+            <a asp-action="Aminoacidos" class="category-card" style="border: 1px solid var(--border-color);">
+                <img src="https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600&q=80" class="img-fluid w-100 h-100" alt="Aminoácidos" style="opacity: 0.85; background-color: #141414; object-fit: cover;">
+                
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end justify-content-center pb-4" style="background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%); z-index: 2;">
+                    <span class="text-white fw-black text-uppercase" style="letter-spacing: 2px; font-size: 0.9rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 4px;">Aminoácidos</span>
                 </div>
-                <img src="/imagenes/aminopia.png" class="img-fluid" alt="Aminoácidos">
             </a>
         </div>
 
         <div class="col-6 col-md-3">
-            <a asp-action="Proteinas" asp-route-categoria="Proteinas" class="category-card">
-                <div class="category-overlay">
-                    <span class="category-text">Proteínas</span>
+            <a asp-action="Proteinas" class="category-card" style="border: 1px solid var(--border-color);">
+                <img src="https://images.unsplash.com/photo-1579722820308-d74e571900a9?w=600&q=80" class="img-fluid w-100 h-100" alt="Proteínas" style="opacity: 0.85; background-color: #141414; object-fit: cover;">
+                
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end justify-content-center pb-4" style="background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%); z-index: 2;">
+                    <span class="text-white fw-black text-uppercase" style="letter-spacing: 2px; font-size: 0.9rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 4px;">Proteínas</span>
                 </div>
-                <img src="~/imagenes/gold-standard-whey.jpg" class="img-fluid" alt="Proteínas">
             </a>
         </div>
 
-         <div class="col-6 col-md-3">
-            <a asp-action="Creatinas" asp-route-categoria="Creatinas" class="category-card">
-                <div class="category-overlay">
-                    <span class="category-text">Creatinas</span>
+        <div class="col-6 col-md-3">
+            <a asp-action="Creatinas" class="category-card" style="border: 1px solid var(--border-color);">
+                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80" class="img-fluid w-100 h-100" alt="Creatinas" style="opacity: 0.85; background-color: #141414; object-fit: cover;">
+                
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end justify-content-center pb-4" style="background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%); z-index: 2;">
+                    <span class="text-white fw-black text-uppercase" style="letter-spacing: 2px; font-size: 0.9rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 4px;">Creatinas</span>
                 </div>
-                <img src="~/imagenes/creatinaDragon200.png" class="img-fluid" alt="creatinas">
             </a>
         </div>
-         <div class="col-6 col-md-3">
-                    <a asp-action="PreWorkouts" asp-route-categoria="Pre-Workouts" class="category-card">
-                 <div class="category-overlay">
-                     <span class="category-text">Pre-Entrenos</span>
-                     </div>
-                        <img src="~/imagenes/prefresaK.png" class="img-fluid" alt="Pre-Workouts">
-                 </a>
-             </div>
+        
+        <div class="col-6 col-md-3">
+            <a asp-action="PreWorkouts" class="category-card" style="border: 1px solid var(--border-color);">
+                <img src="https://imgs.search.brave.com/nZVdq3xUR9achHHzqDb99Im2KxtMLSYptVEqs_A_FdM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYXB0/YWlubnV0cml0aW9u/Lm14L2Nkbi9zaG9w/L2ZpbGVzLzYwMHg2/MDAtcmVuZGVyLXZl/bm9tLWluZmVybm8t/ZHJhZ29ucy1ibG9v/ZC0yXzEwMjR4MTAy/NF8yeC0xLndlYnA_/dj0xNzA3NDM3MDk3/JndpZHRoPXt3aWR0/aH0" class="img-fluid w-100 h-100" alt="Pre-Workouts" style="opacity: 0.85; background-color: #141414; object-fit: cover;">
+                
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end justify-content-center pb-4" style="background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%); z-index: 2;">
+                    <span class="text-white fw-black text-uppercase" style="letter-spacing: 2px; font-size: 0.9rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 4px;">Pre-Entrenos</span>
+                </div>
+            </a>
+        </div>
+        
     </div>
 </div>

@@ -1,9 +1,19 @@
 /* =========================================
-   1. VARIABLES Y CONFIGURACIÓN BASE
+   1. VARIABLES Y CONFIGURACIÓN BASE (KINETIC)
    ========================================= */
 :root {
-    --accent-color: #e63946; /* Rojo deportivo */
-    --main-black: #0a0a0a;
+    --accent-color: #E62020; /* Rojo Kinetic (más vibrante) */
+    --main-black: #0F0F0F; /* Fondo principal súper oscuro */
+    --surface-dark: #1A1A1A; /* Fondo para tarjetas y cajas */
+    --text-main: #F4F4F4; /* Texto principal casi blanco */
+    --text-muted: #888888; /* Texto secundario/gris */
+    --border-color: #2A2A2A; /* Bordes sutiles */
+}
+
+/* Forzar modo oscuro global */
+body {
+    background-color: var(--main-black) !important;
+    color: var(--text-main) !important;
 }
 
 .fw-black {
@@ -12,6 +22,7 @@
 
 .italic {
     font-style: italic;
+    transform: skewX(-5deg); /* Le da un toque de velocidad extra */
 }
 
 .underline {
@@ -25,32 +36,46 @@
    ========================================= */
 .bg-black {
     background-color: var(--main-black) !important;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .border-bottom-accent {
-    border-bottom: 4px solid var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
 }
 
 .navbar-nav .nav-link {
     font-size: 0.85rem;
-    letter-spacing: 1px;
+    letter-spacing: 2px; /* Más espaciado para verse premium */
     padding: 0.5rem 1.2rem !important;
-    color: #ffffff !important;
+    color: var(--text-muted) !important;
+    text-transform: uppercase;
     transition: color 0.3s;
 }
 
-.custom-link:hover {
-    color: var(--accent-color) !important;
-}
+    .custom-link:hover, .navbar-nav .nav-link.active {
+        color: var(--text-main) !important;
+        border-bottom: 2px solid var(--accent-color);
+    }
 
 .dropdown-menu {
     border-radius: 0;
-    border: 1px solid #333;
+    background-color: var(--surface-dark);
+    border: 1px solid var(--border-color);
 }
+
+    .dropdown-menu .dropdown-item {
+        color: var(--text-main);
+    }
+
+        .dropdown-menu .dropdown-item:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
 
 /* Redes Sociales */
 .social-icons i {
     transition: transform 0.2s;
+    color: var(--text-muted);
 }
 
     .social-icons i:hover {
@@ -66,25 +91,29 @@
     background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920');
     background-size: cover;
     background-position: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .hero-overlay {
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    /* Degradado oscuro en lugar de solo negro transparente */
+    background: linear-gradient(to bottom, rgba(15,15,15,0.2) 0%, rgba(15,15,15,0.9) 100%);
 }
 
 /* =========================================
    4. PRODUCTOS (TARJETAS Y BOTONES)
    ========================================= */
-.card-product {
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: none;
-    background-color: #f8f9fa;
+.card, .card-product {
+    background-color: var(--surface-dark) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 0 !important; /* Esquinas afiladas */
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
-    .card-product:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    .card:hover, .card-product:hover {
+        transform: translateY(-5px);
+        border-color: #444 !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     }
 
 .product-card {
@@ -95,91 +124,116 @@
         transform: translateY(-5px);
     }
 
-.card-img-custom {
+.card-img-custom, .card-img-top {
     padding: 1.5rem;
     object-fit: contain;
     height: 250px;
+    background-color: #141414; /* Fondo sutil para resaltar el bote */
 }
 
 /* Botones y Etiquetas */
-.btn-buy {
-    background-color: #000;
-    color: #fff;
+.btn-buy, .btn-dark {
+    background-color: var(--surface-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
     border-radius: 0;
     font-weight: bold;
+    letter-spacing: 1px;
 }
 
-    .btn-buy:hover {
-        background-color: #333;
-        color: #ffc107;
+    .btn-buy:hover, .btn-dark:hover {
+        background-color: #222;
+        border-color: var(--accent-color);
+        color: var(--accent-color);
     }
 
-.btn-black-gym {
-    background-color: #000;
+.btn-danger {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
     color: #fff;
     border-radius: 0;
-    font-weight: bold;
-    transition: 0.3s;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
-    .btn-black-gym:hover {
-        background-color: var(--accent-color);
-        color: white;
+    .btn-danger:hover {
+        background-color: #C01515 !important;
+        box-shadow: 0 0 15px rgba(230, 32, 32, 0.4);
     }
 
 .badge-category {
-    background-color: #ffc107;
-    color: #000;
+    background-color: var(--accent-color);
+    color: #fff;
     font-weight: bold;
+    border-radius: 0;
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+/* Textos dentro de las tarjetas */
+.card-body h6 {
+    color: var(--text-main) !important;
+    letter-spacing: 1px;
+}
+
+.card-body p.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.text-danger {
+    color: var(--accent-color) !important;
 }
 
 /* =========================================
-   5. CATEGORÍAS (CUADRÍCULAS)
+   5. CATEGORÍAS Y FILTROS
    ========================================= */
 .section-title {
     letter-spacing: 2px;
+    color: var(--text-main);
 }
 
-/* Cuadros Grandes */
+/* Cuadros Grandes del Catálogo */
 .category-card {
     position: relative;
     display: block;
     overflow: hidden;
     aspect-ratio: 1 / 1;
+    background-color: #111;
 }
 
     .category-card img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
+        transition: transform 0.5s ease, opacity 0.5s ease;
     }
 
     .category-card:hover img {
         transform: scale(1.1);
+        opacity: 1 !important;
     }
 
-.category-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0,0,0,0.2);
-    z-index: 2;
+/* Barra lateral de filtros */
+aside .card {
+    background-color: var(--main-black) !important;
+    border-right: 1px solid var(--border-color) !important;
+    border: none;
 }
 
-.category-text {
-    background-color: white;
-    color: black;
-    padding: 5px 15px;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
+aside h5, aside h6 {
+    color: var(--text-main);
+}
+
+.form-check-label {
+    color: var(--text-muted);
+}
+
+.form-select {
+    background-color: var(--surface-dark);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 0;
 }
 
 /* Mini Cards (Más Vendidos) */
@@ -188,6 +242,7 @@
     display: block;
     overflow: hidden;
     height: 180px;
+    border: 1px solid var(--border-color);
 }
 
     .category-card-mini img {
@@ -195,10 +250,12 @@
         height: 100%;
         object-fit: cover;
         transition: transform 0.4s ease;
+        opacity: 0.8;
     }
 
     .category-card-mini:hover img {
         transform: scale(1.1);
+        opacity: 1;
     }
 
 .mini-overlay {
@@ -207,194 +264,481 @@
     left: 0;
     right: 0;
     top: 0;
-    background: rgba(0,0,0,0.2);
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
+    padding-bottom: 15px;
 }
 
 .mini-text {
-    background: white;
-    color: black;
-    padding: 3px 12px;
-    font-weight: bold;
+    background: transparent;
+    color: var(--text-main);
+    padding: 5px 15px;
+    font-weight: 800;
     text-transform: uppercase;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--accent-color);
 }
 
 /* =========================================
-   6. CUENTAS E INICIO DE SESIÓN (IDENTITY)
+   6. ESTILOS DE TABLAS Y ADMINISTRACIÓN
    ========================================= */
 
-/* 1. Centrar la fila SOLO en las pantallas de cuenta */
+/* Estilo Base para tablas oscuras */
+.table-dark {
+    background-color: var(--surface-dark) !important;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+/* Filas alternadas oscuras */
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    color: var(--text-main) !important;
+}
+
+/* Efecto hover táctico en filas */
+.table-hover > tbody > tr:hover > * {
+    background-color: rgba(230, 32, 32, 0.04) !important;
+    color: var(--text-main) !important;
+}
+
+.table-dark td, .table-dark th {
+    color: var(--text-main) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Estado Disponible */
+.badge-state-optimal {
+    background-color: rgba(40, 167, 69, 0.15) !important;
+    color: #28a745 !important;
+    border: 1px solid #28a745;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 0;
+}
+
+/* =========================================
+   7. CUENTAS E INICIO DE SESIÓN (IDENTITY LOGIN/REGISTER)
+   ========================================= */
 main .row:has(#account), main .row:has(#registerForm) {
     display: flex !important;
     justify-content: center !important;
     width: 100%;
 }
 
-    /* 2. Ocultar la columna 2 ("Use another service...") SOLO en pantallas de cuenta */
     main .row:has(#account) > div:nth-child(2), main .row:has(#registerForm) > div:nth-child(2) {
         display: none !important;
     }
 
-    /* 3. Ajustar tamaño de la caja SOLO en pantallas de cuenta */
     main .row:has(#account) > div:nth-child(1), main .row:has(#registerForm) > div:nth-child(1) {
         width: 100% !important;
         max-width: 450px !important;
         flex: 0 0 auto !important;
     }
 
-/* 4. Ocultar los títulos sueltos horribles de Microsoft ("Log in", "Register", etc) afuera de las cajas */
 main > h1, main > h2, main > hr {
     display: none !important;
 }
 
-/* Contenedor oscuro para TODOS los formularios (Login, Registro, Olvidé Contraseña) */
 #account, #registerForm, .gym-form {
-    background-color: var(--main-black);
+    background-color: var(--surface-dark);
     padding: 35px;
-    border: 2px solid var(--accent-color);
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    color: white;
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--accent-color);
+    border-radius: 0;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+    color: var(--text-main);
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
 
-    /* Títulos DENTRO del formulario */
     #account h2, #registerForm h2, .gym-title {
-        color: var(--accent-color);
+        color: var(--text-main);
         font-weight: 900;
         font-style: italic;
         text-transform: uppercase;
-        border-bottom: 2px solid #333;
+        border-bottom: 1px solid var(--border-color);
         padding-bottom: 10px;
         margin-bottom: 25px;
         font-size: 1.5rem;
     }
 
-    /* Ocultamos los textos genéricos de Microsoft que estorban */
-    #account h3, #registerForm h3 {
-        display: none;
+    #account h3, #registerForm h3, #resend-confirmation {
+        display: none !important;
     }
 
-/* Ocultar el botón de "Reenviar correo" porque no lo usamos en el PIA */
-#resend-confirmation {
-    display: none !important;
-}
-
-/* Etiquetas de los inputs */
-#account .form-label, #registerForm .form-label, .gym-form .form-label {
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    color: #ccc;
-}
-
-/* Cajas de texto (Inputs) */
-#account .form-control, #registerForm .form-control, .gym-form .form-control {
-    background-color: #1a1a1a;
-    border: 1px solid #444;
-    color: white;
-    border-radius: 4px;
-}
-
-    /* Cuando le das clic a la caja de texto */
-    #account .form-control:focus, #registerForm .form-control:focus, .gym-form .form-control:focus {
-        border-color: var(--accent-color);
-        box-shadow: 0 0 8px rgba(230, 57, 70, 0.6);
-        background-color: #222;
+    #account .form-label, #registerForm .form-label, .gym-form .form-label {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: var(--text-muted);
     }
 
-/* Botón principal (Iniciar sesión / Registrar / Recuperar) */
-#account .btn-primary, #registerForm .btn-primary, .gym-form .btn-primary {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    color: white;
-    text-transform: uppercase;
-    font-weight: 900;
-    letter-spacing: 1px;
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    border-radius: 4px;
-    transition: 0.3s;
-}
-
-    #account .btn-primary:hover, #registerForm .btn-primary:hover, .gym-form .btn-primary:hover {
-        background-color: #b02a37;
-        border-color: #b02a37;
-        transform: translateY(-2px);
-    }
-
-/* Enlaces (Recuperar contraseña, crear cuenta) */
-#account a, #registerForm a {
-    color: var(--accent-color);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: 0.3s;
-    display: block;
-    margin-top: 8px;
-}
-
-    #account a:hover, #registerForm a:hover {
+    #account .form-control, #registerForm .form-control, .gym-form .form-control {
+        background-color: var(--main-black);
+        border: 1px solid var(--border-color);
         color: white;
-        text-decoration: underline;
+        border-radius: 0;
+        padding: 12px;
     }
 
-/* Ajuste del checkbox "Recordarme" */
-.form-check-input:checked {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
+        #account .form-control:focus, #registerForm .form-control:focus, .gym-form .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: inset 2px 0 0 var(--accent-color);
+            background-color: #111;
+        }
+
+    #account .btn-primary, #registerForm .btn-primary, .gym-form .btn-primary {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: white;
+        text-transform: uppercase;
+        font-weight: 900;
+        letter-spacing: 2px;
+        width: 100%;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 0;
+        transition: 0.3s;
+    }
+
+        #account .btn-primary:hover, #registerForm .btn-primary:hover, .gym-form .btn-primary:hover {
+            background-color: #C01515;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 32, 32, 0.3);
+        }
+
+    #account a, #registerForm a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: 0.3s;
+        display: block;
+        margin-top: 12px;
+        border-bottom: 1px solid transparent;
+        width: fit-content;
+    }
+
+        #account a:hover, #registerForm a:hover {
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+.form-check-input {
+    background-color: var(--main-black);
+    border-color: var(--border-color);
 }
+
+    .form-check-input:checked {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
 
 /* =========================================
-   DISEÑO DE DETALLES DEL PRODUCTO
+   8. DISEÑO DE DETALLES DEL PRODUCTO
    ========================================= */
-
-/* Título de la sección de sabores */
 .flavor-title {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     letter-spacing: 2px;
-    color: #6c757d;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 800;
 }
 
-/* Contenedor de los botones de sabor */
 .flavor-selector {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* Separación entre botones */
+    gap: 10px;
 }
 
-/* Botones de sabor (Cuadrados y limpios) */
 .btn-flavor {
-    border: 2px solid #dee2e6;
-    background-color: transparent;
-    color: #495057;
+    border: 1px solid var(--border-color);
+    background-color: var(--surface-dark);
+    color: var(--text-muted);
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.85rem;
-    padding: 8px 20px;
-    border-radius: 4px; /* Ligeramente redondeado o ponle 0 si los quieres 100% cuadrados */
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: 0;
     transition: all 0.2s ease-in-out;
 }
 
-    /* Efecto al pasar el mouse o al estar seleccionado */
     .btn-flavor:hover, .btn-flavor.active-flavor {
-        border-color: #dc3545; /* Borde rojo para que combine con tu precio/carrito */
-        color: #dc3545;
-        background-color: #fffafb;
+        border-color: var(--accent-color);
+        color: var(--text-main);
+        background-color: rgba(230, 32, 32, 0.1);
+        box-shadow: inset 2px 0 0 var(--accent-color);
     }
 
-/* Botón de Agregar al carrito flotante */
 .btn-cart-premium {
-    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    box-shadow: 0 4px 15px rgba(230, 32, 32, 0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 0;
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding: 15px;
 }
 
     .btn-cart-premium:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        box-shadow: 0 6px 20px rgba(230, 32, 32, 0.4);
     }
+
+.tech-specs {
+    border-top: 1px solid var(--border-color);
+    margin-top: 2rem;
+    padding-top: 1rem;
+}
+
+.tech-spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.tech-spec-name {
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.tech-spec-value {
+    color: var(--text-main);
+}
+
+/* =========================================
+   9. DISEÑO DEL ARSENAL LATERAL (SIDE CART)
+   ========================================= */
+.tactical-side-cart {
+    border-top: 2px solid var(--accent-color);
+    box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9);
+}
+
+    .tactical-side-cart .offcanvas-header {
+        letter-spacing: 1px;
+    }
+
+.btn-close-white {
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+    .btn-close-white:hover {
+        opacity: 1;
+        transform: rotate(90deg);
+        background-color: var(--accent-color);
+    }
+
+.tactical-side-cart .offcanvas-body {
+    background-color: var(--main-black);
+}
+
+.tactical-side-cart .row {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s;
+}
+
+    .tactical-side-cart .row:hover {
+        background-color: #1a1a1a !important;
+    }
+
+.tactical-side-cart .col-4 > div {
+    transition: transform 0.3s;
+}
+
+.tactical-side-cart .row:hover .col-4 > div {
+    transform: scale(1.03);
+}
+
+.hover-danger:hover {
+    color: var(--accent-color) !important;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   10. PERFIL DE USUARIO (IDENTITY MANAGE)
+   ========================================= */
+main h2 {
+    color: var(--text-main);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+/* Atrapar todos los subtítulos (h3, h4) de las diferentes pestañas */
+main .col-md-9 h3, main .col-md-9 h4 {
+    color: var(--text-main);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+/* Párrafos de advertencia (Ej. pestaña Datos Personales) */
+main .col-md-9 p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+
+/* Menú lateral izquierdo */
+.nav-pills .nav-link {
+    color: var(--text-muted);
+    border-radius: 0;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 15px;
+    border-left: 2px solid transparent;
+    margin-bottom: 5px;
+}
+
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        background-color: rgba(230, 32, 32, 0.08) !important;
+        color: var(--text-main) !important;
+        border-left: 2px solid var(--accent-color) !important;
+    }
+
+    .nav-pills .nav-link:hover:not(.active) {
+        background-color: #1a1a1a;
+        color: white;
+    }
+
+/* Cajas de formularios */
+.col-md-9 form {
+    background-color: var(--surface-dark);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    border-top: 2px solid var(--accent-color);
+}
+
+.form-floating label, .form-label {
+    color: #888;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+}
+
+/* Inputs tácticos */
+.form-floating > .form-control, .form-control {
+    background-color: var(--main-black);
+    border: 1px solid var(--border-color);
+    color: white !important;
+    border-radius: 0;
+}
+
+    .form-floating > .form-control:focus, .form-control:focus {
+        border-color: var(--accent-color);
+        box-shadow: inset 2px 0 0 var(--accent-color);
+        background-color: #111;
+    }
+
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #0a0a0a !important;
+        color: #555 !important;
+        border-color: #222;
+    }
+
+/* =========================================
+   BOTONES PREMIUM (Atrapar TODOS los botones azules de Identity)
+   ========================================= */
+.col-md-9 .btn-primary, .col-md-9 form button[type="submit"] {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: white !important;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 2px;
+    border-radius: 0;
+    padding: 15px 20px;
+    margin-top: 15px;
+    width: 100%;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(230, 32, 32, 0.2);
+}
+
+    .col-md-9 .btn-primary:hover, .col-md-9 form button[type="submit"]:hover {
+        background-color: #C01515 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(230, 32, 32, 0.4) !important;
+    }
+
+/* Botón de Eliminar Cuenta (Rojo oscuro) */
+.col-md-9 .btn-danger {
+    border-radius: 0;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 15px 20px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Enlaces pequeños (Ej. "Send verification email") */
+.col-md-9 a:not(.btn) {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+    .col-md-9 a:not(.btn):hover {
+        color: #C01515;
+        text-decoration: underline;
+    }
+
+/* =========================================
+   11. TARJETAS DEL CATÁLOGO PRINCIPAL
+   ========================================= */
+.product-card {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: var(--surface-dark) !important;
+}
+
+    /* Efecto de elevación al pasar el mouse */
+    .product-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 15px 40px rgba(230, 32, 32, 0.2) !important;
+        border-color: rgba(230, 32, 32, 0.5) !important;
+    }
+
+        /* Cambio de color del botón al hacer hover en la card usando tus variables */
+        .product-card:hover .btn-outline-light {
+            background-color: var(--accent-color) !important;
+            border-color: var(--accent-color) !important;
+            color: white !important;
+        }
+
+
+
+/* Efecto hover táctico para los botones nuevos */
+.btn[href*="Index"]:hover {
+    background-color: #2a2a2a !important;
+    border-color: #444 !important;
+}
+
+.btn[href*="Sabores"]:hover {
+    background-color: #e0a800 !important;
+    border-color: #d39e00 !important;
+    transform: translateY(-2px);
+}

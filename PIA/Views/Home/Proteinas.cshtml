@@ -4,39 +4,47 @@
     ViewData["Title"] = "Proteínas";
 }
 
-<div class="container mt-5">
-    <nav aria-label="breadcrumb">
+<div class="container mt-4 mb-5">
+    
+    <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index" class="text-dark">Inicio</a></li>
-            <li class="breadcrumb-item"><a asp-action="Catalogo" class="text-dark">Productos</a></li>
-            <li class="breadcrumb-item active text-danger fw-bold" aria-current="page">Proteínas</li>
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none hover-danger">Inicio</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Catalogo" class="text-muted text-decoration-none hover-danger">Productos</a></li>
+            <li class="breadcrumb-item active fw-bold" style="color: var(--accent-color);" aria-current="page">Proteínas</li>
         </ol>
     </nav>
 
     <div class="row">
-        <aside class="col-md-3 mb-4">
-            <div class="card border-0 shadow-sm p-3 bg-white">
-                <h5 class="fw-bold mb-3 text-uppercase" style="letter-spacing: 1px;">Filtros</h5>
+        
+        <div class="col-lg-3 mb-4 mb-lg-0">
+            <div class="card p-4 rounded-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+                <h5 class="fw-black text-white text-uppercase mb-4" style="letter-spacing: 1px;">Filtros</h5>
 
-                <div class="filter-group mb-4">
-                    <h6 class="fw-bold small">TIPO DE PROTEÍNA</h6>
-                    <div class="form-check">
+                <div class="mb-4">
+                    <h6 class="text-white fw-bold text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">TIPO DE PROTEÍNA</h6>
+                    <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="whey">
-                        <label class="form-check-label small" for="whey">Whey Protein</label>
+                        <label class="form-check-label text-muted" for="whey" style="font-size: 0.85rem;">
+                            Whey Protein
+                        </label>
                     </div>
-                    <div class="form-check">
+                    <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="isopure">
-                        <label class="form-check-label small" for="isopure">Isolatada (Isolate)</label>
+                        <label class="form-check-label text-muted" for="isopure" style="font-size: 0.85rem;">
+                            Isolatada (Isolate)
+                        </label>
                     </div>
-                    <div class="form-check">
+                    <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="vegan">
-                        <label class="form-check-label small" for="vegan">Vegana</label>
+                        <label class="form-check-label text-muted" for="vegan" style="font-size: 0.85rem;">
+                            Vegana
+                        </label>
                     </div>
                 </div>
 
-                <div class="filter-group mb-4">
-                    <h6 class="fw-bold small">MARCA</h6>
-                    <select class="form-select form-select-sm">
+                <div class="mb-4">
+                    <h6 class="text-white fw-bold text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">MARCA</h6>
+                    <select class="form-select text-white rounded-0" style="background-color: var(--main-black); border: 1px solid var(--border-color); font-size: 0.85rem;">
                         <option selected>Todas las marcas</option>
                         <option>Optimum Nutrition</option>
                         <option>Dymatize</option>
@@ -46,43 +54,80 @@
                     </select>
                 </div>
 
-                <button class="btn btn-danger btn-sm w-100 fw-bold">APLICAR FILTROS</button>
+                <button class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-2 mt-2" style="letter-spacing: 1px;">
+                    Aplicar Filtros
+                </button>
             </div>
-        </aside>
+        </div>
 
-        <main class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold text-uppercase italic mb-0">Proteínas</h2>
+        <div class="col-lg-9">
+            
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom pb-2" style="border-color: var(--border-color) !important;">
+                <h2 class="fw-black text-white text-uppercase italic mb-0" style="letter-spacing: 1px; font-size: 2rem;">PROTEÍNAS</h2>
                 <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) productos</span>
             </div>
 
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                
-                @if (Model != null)
-                {
+            @if (Model != null && Model.Any())
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                    
                     @foreach (var item in Model)
                     {
                         <div class="col">
-                            <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none text-dark">
-                                <div class="card h-100 border-0 shadow-sm product-card-hover" style="transition: transform 0.3s; cursor: pointer;">
-                                    <img src="~/imagenes/gold-standard-whey.jpg" class="img-fluid" alt="Proteinas">
-                                    <div class="card-body text-center">
-                                        <p class="text-muted small mb-1 text-uppercase">@item.Marca</p>
-                                        <h6 class="fw-bold text-uppercase">@item.Nombre</h6>
-                                        
-                                        <div class="text-warning mb-2" style="font-size: 0.8rem;">
-                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
-                                        </div>
-                                        
-                                        <h5 class="text-danger fw-bold">$@item.Precio.ToString("N2")</h5>
+                            <div class="card h-100 product-card rounded-0">
+                                
+                                <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none">
+                                    <div class="p-3 bg-white d-flex align-items-center justify-content-center border-bottom" style="height: 250px; border-color: var(--border-color) !important;">
+                                        <img src="@(string.IsNullOrEmpty(item.ImagenUrl) ? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" : item.ImagenUrl)" 
+                                             class="img-fluid" 
+                                             alt="@item.Nombre" 
+                                             style="max-height: 100%; object-fit: contain;">
+                                    </div>
+                                </a>
+
+                                <div class="card-body text-center p-4 d-flex flex-column">
+                                    <span class="fw-bold text-uppercase d-block mb-2" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 2px;">
+                                        @item.Marca
+                                    </span>
+                                    
+                                    <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none text-white title-hover">
+                                        <h6 class="fw-black text-uppercase mb-3" style="letter-spacing: 1px; line-height: 1.4;">
+                                            @item.Nombre
+                                        </h6>
+                                    </a>
+
+                                    <div class="text-warning mb-3" style="font-size: 0.85rem;">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </div>
+
+                                    <div class="mt-auto">
+                                        <span class="fw-black fs-5" style="color: var(--accent-color);">$@item.Precio.ToString("N2")</span>
                                     </div>
                                 </div>
-                            </a>
+                                
+                            </div>
                         </div>
                     }
-                }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 mt-4" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+                    <i class="bi bi-x-octagon text-muted mb-3" style="font-size: 3rem;"></i>
+                    <h4 class="text-white text-uppercase fw-bold italic">Sin inventario</h4>
+                    <p class="text-muted">Aún no hay proteínas registradas en tu arsenal.</p>
+                </div>
+            }
 
-            </div>
-        </main>
+        </div>
     </div>
 </div>
+
+<style>
+    .title-hover { transition: color 0.2s ease-in-out; }
+    .title-hover:hover h6 { color: var(--accent-color) !important; }
+</style>

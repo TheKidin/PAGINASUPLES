@@ -1,37 +1,77 @@
 ﻿@model PIA.Models.Producto
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del Arsenal";
 }
 
-<h1>Details</h1>
+<div class="container mt-5 mb-5 pt-3">
+    
+    <div class="text-center mb-5">
+        <h2 class="fw-black text-uppercase text-white italic mb-1" style="letter-spacing: 2px;">
+            Detalles del Arsenal
+        </h2>
+        <p class="text-light opacity-75" style="letter-spacing: 1px;">Inspección de base de datos del producto seleccionado</p>
+    </div>
 
-<div>
-    <h4>Producto</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Marca)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Marca)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
-        
-    </dl>
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            
+            <div class="card rounded-0 shadow-lg p-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="row">
+                        <div class="col-md-5 text-center mb-4 mb-md-0">
+                            <div class="d-flex align-items-center justify-content-center p-3 h-100" style="background-color: var(--main-black); border: 1px solid var(--border-color);">
+                                <img src="@(string.IsNullOrEmpty(Model.ImagenUrl) ? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" : Model.ImagenUrl)" 
+                                     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600';"
+                                     class="img-fluid" alt="@Model.Nombre" style="max-height: 250px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-7 ps-md-4 d-flex flex-column justify-content-center">
+                            
+                            <h3 class="fw-black text-white text-uppercase mb-1" style="letter-spacing: 1px;">@Model.Nombre</h3>
+                            <h6 class="fw-bold text-uppercase mb-4" style="color: var(--accent-color); letter-spacing: 2px;">@Model.Marca</h6>
+
+                            <div class="mb-3 border-bottom pb-3" style="border-color: rgba(255,255,255,0.1) !important;">
+                                <span class="text-white small text-uppercase fw-bold d-block mb-1" style="letter-spacing: 1px;">
+                                    <i class="bi bi-tag-fill me-1 text-danger"></i> Precio de Venta
+                                </span>
+                                <h2 class="text-white fw-bold mb-0">$@Model.Precio.ToString("N2")</h2>
+                            </div>
+                            
+                            <div class="mb-2 mt-2">
+                                <span class="text-white small text-uppercase fw-bold d-block mb-1" style="letter-spacing: 1px;">
+                                    <i class="bi bi-upc-scan me-1 text-danger"></i> ID de Base de Datos
+                                </span>
+                                <p class="text-light mb-0 fs-5 fw-bold">#@Model.Id</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-5 pt-4 border-top" style="border-color: rgba(255,255,255,0.1) !important; gap: 10px;">
+                        
+                        <a asp-action="Index" class="btn rounded-0 px-4 py-3 fw-bold text-uppercase w-100 w-md-auto text-white" style="background-color: var(--main-black); border: 1px solid var(--border-color); letter-spacing: 1px; font-size: 0.85rem; transition: 0.3s;">
+                            <i class="bi bi-arrow-left me-2"></i> VOLVER AL PANEL
+                        </a>
+                        
+                        <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
+                            <a asp-action="Sabores" asp-route-id="@Model.Id" class="btn rounded-0 px-4 py-3 fw-black text-uppercase w-100 w-sm-auto text-dark" style="background-color: #ffc107; border: 1px solid #ffc107; letter-spacing: 1px; font-size: 0.85rem; transition: 0.3s;">
+                                <i class="bi bi-tags-fill me-1"></i> SABORES
+                            </a>
+                            
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-danger rounded-0 px-4 py-3 fw-black text-uppercase shadow-sm w-100 w-sm-auto" style="letter-spacing: 1px; font-size: 0.85rem;">
+                                <i class="bi bi-pencil-square me-2"></i> EDITAR ARSENAL
+                            </a>
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
