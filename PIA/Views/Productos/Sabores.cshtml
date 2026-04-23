@@ -4,91 +4,106 @@
     ViewData["Title"] = "Sabores - " + Model.Nombre;
 }
 
-<div class="container mt-4">
-    <h2 class="fw-bold text-uppercase">Administrar Sabores</h2>
-    <h4 class="text-muted">@Model.Nombre (@Model.Marca)</h4>
-    <hr />
+<div class="container mt-5 pt-4 mb-5">
+    
+    <div class="mb-4">
+        <h2 class="fw-black text-uppercase italic mb-0" style="color: var(--text-main); letter-spacing: 2px;">ADMINISTRAR SABORES</h2>
+        <h6 class="fw-bold text-danger text-uppercase" style="letter-spacing: 1px;">@Model.Nombre (@Model.Marca)</h6>
+        <div class="underline mt-3"></div>
+    </div>
 
     <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-light p-3">
-                <h5 class="fw-bold mb-3">➕ Nuevo Sabor</h5>
+        <div class="col-md-4 mb-4 mb-md-0">
+            <div class="p-4" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
+                <h6 class="fw-black text-uppercase mb-4" style="color: var(--text-main); letter-spacing: 1px;">
+                    <i class="bi bi-plus-lg text-danger me-2"></i> Nuevo Sabor
+                </h6>
                 
                 <form asp-action="AgregarSabor" method="post">
                     <input type="hidden" name="productoId" value="@Model.Id" />
                     
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small">Nombre del Sabor</label>
-                        <input type="text" name="sabor" class="form-control" placeholder="Ej. Chocolate Mint" required />
+                    <div class="mb-4">
+                        <label class="form-label text-muted text-uppercase small fw-bold" style="letter-spacing: 1px;">Nombre del Sabor</label>
+                        <input type="text" name="sabor" class="form-control rounded-0" placeholder="Ej. Chocolate Mint" required style="background-color: var(--main-black); border: 1px solid var(--border-color); color: white;" />
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small">Stock Inicial (Botes)</label>
-                        <input type="number" name="stock" class="form-control" value="10" min="0" required />
+                    <div class="mb-4">
+                        <label class="form-label text-muted text-uppercase small fw-bold" style="letter-spacing: 1px;">Stock Inicial (Botes)</label>
+                        <input type="number" name="stock" class="form-control rounded-0" value="10" min="0" required style="background-color: var(--main-black); border: 1px solid var(--border-color); color: white;" />
                     </div>
                     
-                    <button type="submit" class="btn btn-dark w-100 fw-bold">GUARDAR SABOR</button>
+                    <button type="submit" class="btn btn-danger btn-lg rounded-0 w-100 fw-black text-uppercase btn-cart-premium" style="letter-spacing: 1px; font-size: 0.85rem;">
+                        GUARDAR SABOR
+                    </button>
                 </form>
             </div>
             
-            <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-3">Volver a la lista</a>
+            <a asp-action="Index" class="btn btn-outline-light rounded-0 w-100 mt-3 text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 0.8rem;">
+                Volver a la lista
+            </a>
         </div>
 
         <div class="col-md-8">
-            <div class="card shadow-sm border-0 p-3">
-                <h5 class="fw-bold mb-3">📋 Sabores Registrados</h5>
+            <div class="p-4" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
+                <h6 class="fw-black text-uppercase mb-4" style="color: var(--text-main); letter-spacing: 1px;">
+                    <i class="bi bi-card-checklist text-danger me-2"></i> Sabores Registrados
+                </h6>
                 
                 @if (Model.Variantes != null && Model.Variantes.Any())
                 {
-                    <table class="table table-hover align-middle">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Sabor</th>
-                                <th>Stock Disponible</th>
-                                <th>Estado</th>
-                                <th class="text-end">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var variante in Model.Variantes)
-                            {
-                                <tr>
-                                    <td class="fw-bold">@variante.Sabor</td>
-                                    <td>@variante.Stock unidades</td>
-                                    <td>
-                                        @if (variante.Stock > 0)
-                                        {
-                                            <span class="badge bg-success">Disponible</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-danger">Agotado</span>
-                                        }
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a asp-action="EditarSabor" asp-route-id="@variante.Id" class="btn btn-sm btn-warning fw-bold shadow-sm" title="Editar unidades o nombre">
-                                                <i class="bi bi-pencil-square"></i> Editar
-                                            </a>
-
-                                            <form asp-action="EliminarSabor" method="post" onsubmit="return confirm('¡ALERTA 3312! 🚨 ¿Estás totalmente seguro de que deseas desintegrar el sabor @variante.Sabor?');">
-                                                <input type="hidden" name="id" value="@variante.Id" />
-                                                <input type="hidden" name="productoId" value="@Model.Id" />
-                                                <button type="submit" class="btn btn-sm btn-danger fw-bold shadow-sm" title="¡Eliminar sabor!">
-                                                    <i class="bi bi-exclamation-triangle-fill"></i> 3312
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped table-hover table-borderless align-middle mb-0">
+                            <thead style="border-bottom: 2px solid var(--accent-color);">
+                                <tr class="text-uppercase small" style="letter-spacing: 1px; color: var(--text-muted);">
+                                    <th class="py-3">Sabor</th>
+                                    <th class="py-3">Stock Disponible</th>
+                                    <th class="py-3">Estado</th>
+                                    <th class="text-end py-3">Acciones</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var variante in Model.Variantes)
+                                {
+                                    <tr>
+                                        <td class="fw-bold py-3 text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;">@variante.Sabor</td>
+                                        <td class="py-3">@variante.Stock unidades</td>
+                                        <td class="py-3">
+                                            @if (variante.Stock > 0)
+                                            {
+                                                <span class="badge badge-state-optimal fw-bold">Disponible</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger rounded-0 fw-bold text-uppercase" style="font-size: 0.65rem;">Agotado</span>
+                                            }
+                                        </td>
+                                        <td class="text-end py-3">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a asp-action="EditarSabor" asp-route-id="@variante.Id" class="btn btn-sm btn-outline-warning rounded-0 fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;" title="Editar">
+                                                    <i class="bi bi-pencil-square"></i> EDITAR
+                                                </a>
+
+                                                <form asp-action="EliminarSabor" method="post" onsubmit="return confirm('¡ALERTA 3312! 🚨 ¿Estás seguro de desintegrar el sabor @variante.Sabor?');">
+                                                    <input type="hidden" name="id" value="@variante.Id" />
+                                                    <input type="hidden" name="productoId" value="@Model.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-danger rounded-0 fw-bold text-uppercase btn-cart-premium" style="font-size: 0.7rem; letter-spacing: 1px;" title="¡Eliminar sabor!">
+                                                        <i class="bi bi-exclamation-triangle-fill"></i> 3312
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
                 else
                 {
-                    <div class="alert alert-warning text-center">
-                        Aún no le has registrado ningún sabor a este producto. <br> Usa el formulario de la izquierda para agregar el primero.
+                    <div class="text-center py-5" style="border: 1px dashed var(--border-color);">
+                        <i class="bi bi-inboxes text-muted mb-3" style="font-size: 3rem;"></i>
+                        <h6 class="fw-bold text-uppercase text-muted" style="letter-spacing: 1px;">Sin Sabores Registrados</h6>
+                        <p class="small text-muted mb-0">Usa el formulario de la izquierda para agregar el primero.</p>
                     </div>
                 }
             </div>

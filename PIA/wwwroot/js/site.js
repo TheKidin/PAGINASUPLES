@@ -198,4 +198,48 @@
         });
     }
 
+    // ==========================================
+    // 4. TRADUCIR Y ADAPTAR EL PANEL "MI PERFIL" (IDENTITY MANAGE)
+    // ==========================================
+    if (window.location.href.indexOf("Account/Manage") > -1) {
+
+        // 1. Título General y Menú Lateral
+        $("main h2").first().text("PANEL DE CONTROL TÁCTICO");
+        $("#profile").text("Perfil");
+        $("#email").text("Correo Electrónico");
+        $("#change-password").text("Contraseña");
+        $("#two-factor").text("Seguridad 2FA");
+        $("#personal-data").text("Datos Personales");
+
+        // 2. Pestaña: PERFIL
+        $("label:contains('Username')").text("USUARIO / CORREO");
+        $("label:contains('Phone number')").text("TELÉFONO DE CONTACTO");
+        $("#update-profile-button").text("GUARDAR CAMBIOS");
+
+        // 3. Pestaña: CORREO ELECTRÓNICO
+        $("h3:contains('Manage Email')").text("ADMINISTRAR CORREO");
+        $("label:contains('New email')").text("NUEVO CORREO");
+        $("#change-email-button").text("ACTUALIZAR CORREO");
+        $("button:contains('Send verification email')").text("ENVIAR CÓDIGO DE VERIFICACIÓN");
+
+        // 4. Pestaña: CONTRASEÑA
+        $("h3:contains('Change password')").text("ACTUALIZAR CONTRASEÑA");
+        $("label:contains('Current password')").text("CONTRASEÑA ACTUAL");
+        $("label:contains('New password')").text("NUEVA CONTRASEÑA");
+        $("label:contains('Confirm new password')").text("CONFIRMAR NUEVA CONTRASEÑA");
+        $("button:contains('Update password')").text("ACTUALIZAR CREDENCIALES");
+
+        // 5. Pestaña: 2FA (Doble Autenticación)
+        $("h3:contains('Two-factor authentication (2FA)')").text("DOBLE AUTENTICACIÓN (2FA)");
+        $("h4:contains('Authenticator app')").text("APP AUTENTICADORA");
+        $("a:contains('Add authenticator app'), button:contains('Add authenticator app')").text("VINCULAR APLICACIÓN");
+
+        // 6. Pestaña: DATOS PERSONALES
+        $("h3:contains('Personal Data')").text("TUS DATOS PERSONALES");
+        $("p:contains('Your account contains personal data')").text("Tu cuenta contiene datos personales que nos has proporcionado. Esta sección te permite descargar tu expediente o eliminar permanentemente tu cuenta del sistema.");
+        $("p:contains('Deleting this data will permanently remove your account')").text("ALERTA: Eliminar estos datos destruirá permanentemente tu cuenta y no podrá ser recuperada.");
+        $("a:contains('Download'), button:contains('Download')").text("DESCARGAR EXPEDIENTE");
+        $("a:contains('Delete'), button:contains('Delete')").text("DESINTEGRAR CUENTA");
+    }
+
 });

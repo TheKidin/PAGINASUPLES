@@ -6,10 +6,14 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <h2 class="fw-black text-uppercase italic section-title mb-0" style="color: var(--text-main);">Panel de Control: Productos</h2>
+    <a asp-action="Create" class="btn btn-danger btn-lg rounded-0 fw-black text-uppercase" style="letter-spacing: 2px;">
+        <i class="bi bi-plus-lg me-2"></i> Añadir Nuevo Arsenal
+    </a>
+</div>
+
+<table class="table table-dark table-striped table-hover table-borderless align-middle">
     <thead>
         <tr>
             <th>
@@ -38,13 +42,19 @@
                 @Html.DisplayFor(modelItem => item.Precio)
             </td>
             
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Sabores" asp-route-id="@item.Id" class="text-success fw-bold">🛒 Sabores</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
-
-            </td>
+                <td class="text-end">
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-0 text-uppercase fw-bold" style="font-size: 0.7rem;">Editar</a>
+        
+                        <a asp-action="Sabores" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning rounded-0 text-uppercase fw-bold" style="font-size: 0.7rem;">
+                            <i class="bi bi-cart"></i> Sabores
+                        </a>
+        
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-light rounded-0 text-uppercase fw-bold" style="font-size: 0.7rem;">Detalles</a>
+        
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger rounded-0 text-uppercase fw-bold btn-cart-premium" style="font-size: 0.7rem;">Eliminar</a>
+                    </div>
+                </td>
         </tr>
 }
     </tbody>
