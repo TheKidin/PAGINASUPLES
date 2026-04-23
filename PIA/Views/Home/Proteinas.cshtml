@@ -24,19 +24,19 @@
                     <h6 class="text-white fw-bold text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">TIPO DE PROTEÍNA</h6>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="whey">
-                        <label class="form-check-label text-muted" for="whey" style="font-size: 0.85rem;">
+                        <label class="form-check-label text-white" for="whey" style="font-size: 0.85rem;">
                             Whey Protein
                         </label>
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="isopure">
-                        <label class="form-check-label text-muted" for="isopure" style="font-size: 0.85rem;">
+                        <label class="form-check-label text-white" for="isopure" style="font-size: 0.85rem;">
                             Isolatada (Isolate)
                         </label>
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="vegan">
-                        <label class="form-check-label text-muted" for="vegan" style="font-size: 0.85rem;">
+                        <label class="form-check-label text-white" for="vegan" style="font-size: 0.85rem;">
                             Vegana
                         </label>
                     </div>
@@ -74,13 +74,13 @@
                     @foreach (var item in Model)
                     {
                         <div class="col">
-                            <div class="card h-100 product-card rounded-0">
+                            <div class="card h-100 product-card rounded-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
                                 
                                 <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none">
-                                    <div class="p-3 bg-white d-flex align-items-center justify-content-center border-bottom" style="height: 250px; border-color: var(--border-color) !important;">
-                                        <img src="@(string.IsNullOrEmpty(item.ImagenUrl) ? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" : item.ImagenUrl)" 
-                                             class="img-fluid" 
-                                             alt="@item.Nombre" 
+                                    <div class="p-3 d-flex align-items-center justify-content-center border-bottom" style="height: 250px; background-color: #000000; border-color: var(--border-color) !important;">
+                                        <img src="@(string.IsNullOrEmpty(item.ImagenUrl) ? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600" : item.ImagenUrl)"
+                                             class="img-fluid"
+                                             alt="@item.Nombre"
                                              style="max-height: 100%; object-fit: contain;">
                                     </div>
                                 </a>
@@ -126,8 +126,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .title-hover { transition: color 0.2s ease-in-out; }
-    .title-hover:hover h6 { color: var(--accent-color) !important; }
-</style>

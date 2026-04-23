@@ -742,3 +742,12 @@ main .col-md-9 p {
     border-color: #d39e00 !important;
     transform: translateY(-2px);
 }
+/* Efecto al pasar el mouse por el título del producto */
+.title-hover {
+    transition: color 0.2s ease-in-out;
+}
+
+.title-hover:hover h6 {
+    color: var(--accent-color) !important;
+}
+
