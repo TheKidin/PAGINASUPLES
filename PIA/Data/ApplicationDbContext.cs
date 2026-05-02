@@ -19,5 +19,7 @@ namespace PIA.Data
         public DbSet<ItemCarrito> ItemsCarrito { get; set; }
 
         public DbSet<Pedido> Pedidos { get; set; }
+
+        public DbSet<DetallePedido> DetallesPedido { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace PIA.Controllers
             // Vamos a la base de datos y traemos los últimos 4 productos registrados
             var productos = await _context.Productos
                                           .OrderByDescending(p => p.Id)
-                                          .Take(4)
+                                          .Take(10)
                                           .ToListAsync();
 
             return View(productos);

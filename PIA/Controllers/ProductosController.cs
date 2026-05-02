@@ -24,26 +24,19 @@ namespace PIA.Controllers
         // GET: Productos
         public async Task<IActionResult> Index()
         {
-            // Opcional: Traemos también las variantes para que no marque error si intentas contarlas en el Index
             return View(await _context.Productos.Include(p => p.Variantes).ToListAsync());
         }
 
         // GET: Productos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var producto = await _context.Productos
-                .Include(p => p.Variantes) // Añadimos esto para ver los sabores en los detalles del admin
+                .Include(p => p.Variantes)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (producto == null)
-            {
-                return NotFound();
-            }
+            if (producto == null) return NotFound();
 
             return View(producto);
         }
@@ -57,7 +50,6 @@ namespace PIA.Controllers
         // POST: Productos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // CORRECCIÓN: Quitamos Sabor y Stock del Bind. Agregamos ImagenUrl por si la usas.
         public async Task<IActionResult> Create([Bind("Id,Nombre,Marca,Precio,ImagenUrl")] Producto producto)
         {
             if (ModelState.IsValid)
@@ -72,29 +64,20 @@ namespace PIA.Controllers
         // GET: Productos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var producto = await _context.Productos.FindAsync(id);
-            if (producto == null)
-            {
-                return NotFound();
-            }
+            if (producto == null) return NotFound();
+
             return View(producto);
         }
 
         // POST: Productos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // CORRECCIÓN: Quitamos Sabor y Stock del Bind.
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Marca,Precio,ImagenUrl")] Producto producto)
         {
-            if (id != producto.Id)
-            {
-                return NotFound();
-            }
+            if (id != producto.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -105,14 +88,8 @@ namespace PIA.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductoExists(producto.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!ProductoExists(producto.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -122,17 +99,10 @@ namespace PIA.Controllers
         // GET: Productos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var producto = await _context.Productos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (producto == null)
-            {
-                return NotFound();
-            }
+            var producto = await _context.Productos.FirstOrDefaultAsync(m => m.Id == id);
+            if (producto == null) return NotFound();
 
             return View(producto);
         }
@@ -147,7 +117,6 @@ namespace PIA.Controllers
             {
                 _context.Productos.Remove(producto);
             }
-
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -158,7 +127,7 @@ namespace PIA.Controllers
         }
 
         // ==========================================
-        // NUEVOS MÉTODOS PARA ADMINISTRAR SABORES
+        // MÉTODOS PARA ADMINISTRAR SABORES
         // ==========================================
 
         public async Task<IActionResult> Sabores(int? id)
@@ -190,31 +159,25 @@ namespace PIA.Controllers
 
             return RedirectToAction(nameof(Sabores), new { id = productoId });
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarSabor(int id, int productoId)
         {
-            // Buscamos el sabor exacto que queremos borrar
             var sabor = await _context.VariantesProducto.FindAsync(id);
 
             if (sabor != null)
             {
-                // Lo eliminamos de la base de datos
                 _context.VariantesProducto.Remove(sabor);
                 await _context.SaveChangesAsync();
             }
-
-            // Recargamos la pantalla de sabores de este producto
             return RedirectToAction(nameof(Sabores), new { id = productoId });
         }
-        // ==========================================
-        // PANTALLA: EDITAR UN SABOR EXISTENTE
-        // ==========================================
+
         public async Task<IActionResult> EditarSabor(int? id)
         {
             if (id == null) return NotFound();
 
-            // Buscamos el sabor y de paso traemos los datos de su producto padre
             var variante = await _context.VariantesProducto
                 .Include(v => v.Producto)
                 .FirstOrDefaultAsync(v => v.Id == id);
@@ -242,10 +205,28 @@ namespace PIA.Controllers
                     if (!_context.VariantesProducto.Any(e => e.Id == variante.Id)) return NotFound();
                     else throw;
                 }
-                // Si todo sale bien, lo regresamos a la tabla de sabores de ese producto
                 return RedirectToAction(nameof(Sabores), new { id = variante.ProductoId });
             }
             return View(variante);
+        }
+
+        // ==========================================
+        // NUEVO: SISTEMA DE ALERTA DE INVENTARIO
+        // ==========================================
+
+        public async Task<IActionResult> StockBajo()
+        {
+            // Definimos el umbral crítico (ejemplo: menos de 5 unidades)
+            int umbralCritico = 5;
+
+            // Escaneamos la tabla de SABORES e incluimos los datos del PRODUCTO padre
+            var arsenalCritico = await _context.VariantesProducto
+                .Include(v => v.Producto)
+                .Where(v => v.Stock <= umbralCritico)
+                .OrderBy(v => v.Stock)
+                .ToListAsync();
+
+            return View(arsenalCritico);
         }
     }
 }

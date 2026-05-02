@@ -242,4 +242,34 @@
         $("a:contains('Delete'), button:contains('Delete')").text("DESINTEGRAR CUENTA");
     }
 
+    // ==========================================
+    // 5. MOTOR INFINITO PARA EL SCROLLER TÁCTICO (NUEVOS LANZAMIENTOS)
+    // ==========================================
+    const scroller = document.querySelector('.product-scroller');
+
+    // Verificamos si existe el scroller en la página actual (para que no marque error en otras páginas)
+    if (scroller) {
+        let isHovered = false;
+        let scrollSpeed = 1; // Velocidad del deslizamiento (1 es suave, 2 es más rápido)
+
+        // Sensores: Pausar si el cliente pone el mouse sobre los productos o toca la pantalla
+        scroller.addEventListener('mouseenter', () => isHovered = true);
+        scroller.addEventListener('mouseleave', () => isHovered = false);
+        scroller.addEventListener('touchstart', () => isHovered = true); // Para celulares
+        scroller.addEventListener('touchend', () => isHovered = false);
+
+        // El motor infinito (Se ejecuta 60 veces por segundo)
+        setInterval(() => {
+            if (!isHovered) {
+                scroller.scrollLeft += scrollSpeed;
+
+                // Si el radar detecta que llegamos al final, reiniciamos el ciclo suavemente
+                // Le restamos 1 al scrollWidth para evitar bugs de redondeo en navegadores con zoom
+                if (scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 1) {
+                    scroller.scrollLeft = 0;
+                }
+            }
+        }, 20); // 20 milisegundos de intervalo
+    }
+
 });

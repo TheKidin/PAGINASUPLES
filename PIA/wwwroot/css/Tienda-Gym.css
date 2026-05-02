@@ -729,8 +729,6 @@ main .col-md-9 p {
             color: white !important;
         }
 
-
-
 /* Efecto hover táctico para los botones nuevos */
 .btn[href*="Index"]:hover {
     background-color: #2a2a2a !important;
@@ -742,12 +740,114 @@ main .col-md-9 p {
     border-color: #d39e00 !important;
     transform: translateY(-2px);
 }
+
 /* Efecto al pasar el mouse por el título del producto */
 .title-hover {
     transition: color 0.2s ease-in-out;
 }
 
-.title-hover:hover h6 {
-    color: var(--accent-color) !important;
+    .title-hover:hover h6 {
+        color: var(--accent-color) !important;
+    }
+
+/* =========================================
+   12. HERO CARRUSEL (TRANSICIONES)
+   ========================================= */
+.carousel-fade .carousel-item {
+    transition: opacity 1s ease-in-out !important;
 }
 
+/* =========================================
+   13. SLIDER DE PRODUCTOS (SCROLLER TÁCTICO)
+   ========================================= */
+.product-scroller {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* ESCUDO EXPANDIDO: Espacio para que la tarjeta salte y muestre su sombra sin cortarse */
+    padding-top: 20px !important;
+    padding-bottom: 50px !important;
+}
+
+    /* Personalizar la barra de desplazamiento (Solo navegadores Webkit) */
+    .product-scroller::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .product-scroller::-webkit-scrollbar-track {
+        background: var(--surface-dark);
+        border-radius: 10px;
+    }
+
+    .product-scroller::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 10px;
+    }
+
+        .product-scroller::-webkit-scrollbar-thumb:hover {
+            background: #C01515;
+        }
+
+/* =========================================
+   14. REFUERZO TÁCTICO PARA MÓVILES
+   ========================================= */
+@media (max-width: 991px) {
+    /* Evitar que el menú de usuario se salga por la izquierda */
+    .dropdown-menu {
+        position: absolute !important;
+        left: 0 !important;
+        right: auto !important;
+        transform: translateY(10px) !important;
+        min-width: 220px;
+        margin-left: 10px !important;
+    }
+}
+
+/* Reglas exclusivas para Celulares (Pantallas muy pequeñas) */
+@media (max-width: 576px) {
+
+    /* 1. REDUCIR EL CARRITO LATERAL */
+    .tactical-side-cart {
+        width: 85vw !important; /* Ocupará solo el 85% de la pantalla, dejando un 15% libre para tocar y cerrar */
+    }
+
+    /* 2. BLINDAR LA TABLA DE PEDIDOS CONTRA APLASTAMIENTOS */
+    .table-responsive {
+        border: none !important;
+    }
+
+    .table-dark th, .table-dark td {
+        white-space: nowrap !important; /* Prohíbe que los textos se rompan en varios renglones */
+        font-size: 0.8rem !important; /* Reduce sutilmente el tamaño de letra */
+        padding: 12px 15px !important; /* Da más espacio para respirar */
+    }
+
+    /* Ajustes menores para el título de la página de Pedidos */
+    .gym-title, main h2 {
+        font-size: 1.2rem !important;
+    }
+}
+/* =========================================
+   15. VISIBILIDAD Y CONTRASTE (CHECKOUT)
+   ========================================= */
+/* Iluminamos los textos secundarios para que no se camuflen con el fondo */
+.text-muted, .text-secondary {
+    color: #B8B8B8 !important; /* Gris claro táctico, perfectamente legible */
+}
+
+/* Resaltamos las letras pequeñas (como "Sabor: chocolate" y el aviso de PayPal) */
+small, .small {
+    color: #C4C4C4 !important;
+}
+
+/* Aseguramos que cualquier párrafo dentro de las tarjetas de resumen brille lo suficiente */
+.card p, .card-body p {
+    color: #D1D1D1 !important;
+}
+/* =========================================
+   16. PARCHES DE COLOR (BADGES Y STATUS)
+   ========================================= */
+.bg-warning {
+    background-color: #FFC107 !important;
+    color: #111 !important; /* Letras casi negras para máximo contraste */
+    font-weight: 900 !important;
+}

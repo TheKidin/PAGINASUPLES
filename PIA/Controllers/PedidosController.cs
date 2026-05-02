@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PIA.Data; // <-- Asegúrate de que este sea el nombre de tu proyecto .Data
-using PIA.Models; // <-- Asegúrate de que este sea el nombre de tu proyecto .Models
+using PIA.Data;
+using PIA.Models;
+using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Linq;
 
-namespace PIA.Controllers // <-- Si tu proyecto no se llama PIA, cambia esto
+namespace PIA.Controllers
 {
     [Authorize] // 🛡️ BLOQUEO TÁCTICO: Solo usuarios con sesión iniciada pueden entrar aquí
     public class PedidosController : Controller
@@ -20,14 +22,31 @@ namespace PIA.Controllers // <-- Si tu proyecto no se llama PIA, cambia esto
         }
 
         // ==========================================
+        // LA ZONA DE EXTRACCIÓN (CHECKOUT)
+        // ==========================================
+        public async Task<IActionResult> Checkout()
+        {
+            // 1. Obtenemos el ID del usuario que está conectado actualmente de forma segura
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // 2. Buscamos en la base de datos todo lo que tenga en su carrito
+            var carritoDelUsuario = await _context.ItemsCarrito
+                .Include(i => i.Variante)
+                    .ThenInclude(v => v.Producto)
+                .Where(i => i.UsuarioId == userId)
+                .ToListAsync();
+
+            // 3. Le mandamos esa lista real de productos a la Vista
+            return View(carritoDelUsuario);
+        }
+
+        // ==========================================
         // 1. VER LISTA DE MIS PEDIDOS (Para Index.cshtml)
         // ==========================================
         public async Task<IActionResult> Index()
         {
-            // Identificar el ID del usuario que está logueado en este momento
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Ir a la base de datos y traer SOLO los pedidos de este usuario, del más nuevo al más viejo
             var misPedidos = await _context.Pedidos
                                            .Where(p => p.UsuarioId == usuarioId)
                                            .OrderByDescending(p => p.Fecha)
@@ -43,16 +62,94 @@ namespace PIA.Controllers // <-- Si tu proyecto no se llama PIA, cambia esto
         {
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Buscar el pedido exacto por su ID, asegurando que le pertenezca a este usuario (Seguridad)
+            // ⚠️ CORRECCIÓN TÁCTICA: "Detalles" en plural
             var pedido = await _context.Pedidos
-                                       // .Include(p => p.Detalles) // Descomenta esto si tienes una tabla de Detalles conectada
-                                       // .ThenInclude(d => d.Producto)
+                                       .Include(p => p.Detalles) // Carga la lista de lo que compró
+                                          .ThenInclude(d => d.Variante) // Carga el Sabor
+                                             .ThenInclude(v => v.Producto) // Carga la Foto y Nombre
                                        .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == usuarioId);
 
             if (pedido == null)
             {
-                // Si alguien intenta poner un ID de pedido que no es suyo en la URL, lo bloqueamos
                 return NotFound("Misión no encontrada o acceso denegado.");
+            }
+
+            return View(pedido);
+        }
+
+        // ==========================================
+        // FASE 2: PROCESAR EL PAGO EXITOSO EN LA BD
+        // ==========================================
+        [HttpPost]
+        public async Task<IActionResult> ProcesarCompraExitosa(string transaccionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // 1. Traer el carrito actual
+            var carrito = await _context.ItemsCarrito
+                .Include(i => i.Variante)
+                .ThenInclude(v => v.Producto)
+                .Where(i => i.UsuarioId == userId)
+                .ToListAsync();
+
+            if (!carrito.Any()) return BadRequest(new { success = false, message = "El carrito está vacío" });
+
+            // 2. Calcular total
+            decimal totalFinal = carrito.Sum(i => (i.Variante?.Producto?.Precio ?? 0) * i.Cantidad);
+
+            // 3. Crear el Registro del Pedido
+            var nuevoPedido = new Pedido
+            {
+                UsuarioId = userId,
+                Fecha = DateTime.Now,
+                Total = totalFinal,
+                Estado = "Pagado",
+
+                // ⚠️ CORRECCIÓN TÁCTICA: "Detalles" en plural
+                Detalles = carrito.Select(item => new DetallePedido
+                {
+                    VarianteProductoId = item.VarianteProductoId,
+                    Cantidad = item.Cantidad,
+                    Precio = item.Variante?.Producto?.Precio ?? 0
+                }).ToList()
+            };
+
+            _context.Pedidos.Add(nuevoPedido);
+
+            // 4. Restar el Stock de tu arsenal
+            foreach (var item in carrito)
+            {
+                if (item.Variante != null)
+                {
+                    item.Variante.Stock -= item.Cantidad; // ¡Aquí funciona tu alerta de Stock Bajo!
+                }
+            }
+
+            // 5. Vaciar el Carrito del usuario
+            _context.ItemsCarrito.RemoveRange(carrito);
+
+            // 6. Guardar todos los cambios de golpe en la Base de Datos
+            await _context.SaveChangesAsync();
+
+            // 7. Avisarle a la pantalla que todo salió perfecto y mandarle el ID del nuevo pedido
+            return Json(new { success = true, orderId = nuevoPedido.Id });
+        }
+
+        // ==========================================
+        // FASE 3: LA PANTALLA DE VICTORIA (ÉXITO)
+        // ==========================================
+        public async Task<IActionResult> Exito(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Buscamos el pedido para mostrarle el total y su número de orden
+            var pedido = await _context.Pedidos
+                .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == userId);
+
+            // Si por alguna razón no existe, lo mandamos al inicio
+            if (pedido == null)
+            {
+                return RedirectToAction("Index", "Home");
             }
 
             return View(pedido);

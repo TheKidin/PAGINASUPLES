@@ -1,0 +1,110 @@
+﻿@model IEnumerable<PIA.Models.ItemCarrito>
+@{
+    ViewData["Title"] = "Zona de Extracción - Pago";
+    
+    // 1. CÁLCULO TÁCTICO: Sumamos el precio de cada producto multiplicado por su cantidad
+    decimal totalFinal = 0;
+    if (Model != null && Model.Any())
+    {
+        totalFinal = Model.Sum(item => (item.Variante?.Producto?.Precio ?? 0) * item.Cantidad);
+    }
+}
+
+<div class="container mt-5 mb-5 pt-4">
+    <div class="text-center mb-5">
+        <h2 class="fw-black text-uppercase italic text-white" style="letter-spacing: 2px;">ZONA DE EXTRACCIÓN</h2>
+        <div class="underline mx-auto border-danger" style="width: 50px; border-top: 3px solid;"></div>
+        <p class="text-danger fw-bold mt-2" style="letter-spacing: 1px;">PROCESAMIENTO DE PAGO SEGURO</p>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-lg-6">
+            <div class="card p-4 rounded-0 h-100" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+                <h5 class="fw-black text-white text-uppercase mb-4 border-bottom pb-3" style="border-color: var(--border-color) !important;">
+                    <i class="bi bi-receipt text-danger me-2"></i> Resumen del Arsenal
+                </h5>
+                
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        decimal subtotalItem = (item.Variante?.Producto?.Precio ?? 0) * item.Cantidad;
+                        
+                        <div class="d-flex justify-content-between align-items-center text-muted mb-3 pb-2" style="font-size: 0.85rem; border-bottom: 1px dashed #333;">
+                            <div>
+                                <span class="text-white text-uppercase fw-bold">@item.Cantidad x @(item.Variante?.Producto?.Nombre ?? "Desconocido")</span>
+                                <br />
+                                <small style="font-size: 0.7rem;">Sabor: @(item.Variante?.Sabor ?? "N/A")</small>
+                            </div>
+                            <span class="text-white fw-bold">$@subtotalItem.ToString("N2")</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-dark text-center text-uppercase border-secondary rounded-0">
+                        Tu arsenal está vacío.
+                    </div>
+                }
+                
+                <div class="d-flex justify-content-between text-muted mb-4 pb-4" style="border-color: var(--border-color) !important; font-size: 0.9rem;">
+                    <span class="text-uppercase">Logística y Envío</span>
+                    <span class="text-success fw-bold">GRATIS</span>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top" style="border-color: var(--border-color) !important;">
+                    <span class="fw-bold text-white text-uppercase" style="letter-spacing: 1px;">Total a Pagar</span>
+                    <span class="fs-3 fw-black text-danger">$@totalFinal.ToString("N2") <small class="fs-6 text-muted">MXN</small></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card p-4 rounded-0 h-100 d-flex flex-column justify-content-center" style="background-color: #000000; border: 1px solid var(--border-color);">
+                <h5 class="fw-black text-white text-uppercase mb-4 text-center" style="letter-spacing: 1px;">
+                    <i class="bi bi-shield-lock-fill text-success me-2"></i> MÉTODO DE PAGO
+                </h5>
+                
+                <p class="text-center text-muted small mb-4">Serás redirigido a la bóveda segura de PayPal para completar la transacción.</p>
+                
+                @if (totalFinal > 0)
+                {
+                    <div id="paypal-button-container" class="mt-2 px-3"></div>
+                }
+                else
+                {
+                    <button class="btn btn-secondary w-100 rounded-0 disabled">AGREGA PRODUCTOS PARA PAGAR</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://www.paypal.com/sdk/js?client-id=AcrtZjegmdXa3IB9z-dP9sgZkGWQG4IK7A_9goDmcQpoaPg37QEbtSupmLOAzY0hZinLsvNt5PEoU495&currency=MXN"></script>
+
+    <script>
+        paypal.Buttons({
+        createOrder: function(data, actions) {
+        return actions.order.create({
+        purchase_units: [{
+        amount: {
+        currency_code: 'MXN', // ⚠️ ESTO ES VITAL PARA TU VENDEDOR MEXICANO
+        value: '@totalFinal.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)'
+        }
+        }]
+        });
+        },
+        onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+        console.log("Transacción completada:", details);
+        alert('¡Pago de $@totalFinal.ToString("N2") completado con éxito por ' + details.payer.name.given_name + '!');
+        });
+        },
+        onError: function(err) {
+        console.error('Error táctico:', err);
+        alert('Problema de conexión con el banco.');
+        }
+        }).render('#paypal-button-container');
+    </script>
+}
