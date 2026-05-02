@@ -57,6 +57,15 @@
                                     <i class="bi bi-gear-fill"></i> CONTROL
                                 </a>
                             </li>
+                            
+                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center">
+                                <a class="nav-link position-relative text-warning custom-link" asp-controller="Productos" asp-action="StockBajo" style="transition: 0.3s;">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i> ALERTA STOCK
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem; padding: 3px 5px;">
+                                        !
+                                    </span>
+                                </a>
+                            </li>
                         }
                     </ul>
 
@@ -127,8 +136,6 @@
             </div>
         
             <div class="offcanvas-body p-0" id="cartOffcanvasBody">
-            
-                @* @model IEnumerable<PIA.Models.ItemCarrito> *@
             
                 @* Inicializamos con una vista parcial vacía *@
                 @await Html.PartialAsync("_MiniCarrito", Enumerable.Empty<PIA.Models.ItemCarrito>())

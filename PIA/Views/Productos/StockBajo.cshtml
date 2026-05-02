@@ -1,0 +1,63 @@
+﻿@model IEnumerable<PIA.Models.VarianteProducto>
+
+@{
+    ViewData["Title"] = "Alerta de Stock";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-danger pb-3">
+        <h2 class="fw-black text-white text-uppercase italic mb-0">⚠️ Arsenal en Estado Crítico</h2>
+        <span class="badge bg-danger p-2 text-uppercase">Reabastecimiento Urgente</span>
+    </div>
+
+    <div class="product-grid p-4" style="background-color: #000000; border: 1px solid #333;">
+        <table class="table table-dark table-hover align-middle">
+            <thead class="text-danger text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">
+                <tr>
+                    <th>Producto & Sabor</th>
+                    <th class="text-center">Stock Actual</th>
+                    <th class="text-end">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @if (string.IsNullOrEmpty(item.Producto?.ImagenUrl))
+                                {
+                                    <div class="bg-dark d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; border: 1px solid #333;">
+                                        <i class="bi bi-box-seam text-secondary"></i>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img src="@item.Producto.ImagenUrl" style="width: 50px; height: 50px; object-fit: contain; border: 1px solid #333;" class="me-3 bg-white">
+                                }
+                                <div>
+                                    <span class="fw-bold d-block text-white">@(item.Producto?.Nombre ?? "Desconocido")</span>
+                                    <small class="text-warning fw-bold text-uppercase" style="font-size: 0.75rem;">Sabor: @item.Sabor</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="fs-5 fw-black text-danger">@item.Stock</span>
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="EditarSabor" asp-route-id="@item.Id" class="btn btn-sm btn-outline-light rounded-0 fw-bold">EDITAR INVENTARIO</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-shield-check text-success mb-3" style="font-size: 3rem;"></i>
+                <h5 class="text-success text-uppercase fw-bold">Arsenal al 100%. No hay alertas activas.</h5>
+            </div>
+        }
+    </div>
+</div>

@@ -213,6 +213,33 @@ namespace PIA.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PIA.Models.DetallePedido", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("VarianteProductoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PedidoId");
+
+                    b.HasIndex("VarianteProductoId");
+
+                    b.ToTable("DetallesPedido");
+                });
+
             modelBuilder.Entity("PIA.Models.ItemCarrito", b =>
                 {
                     b.Property<int>("Id")
@@ -360,6 +387,25 @@ namespace PIA.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PIA.Models.DetallePedido", b =>
+                {
+                    b.HasOne("PIA.Models.Pedido", "Pedido")
+                        .WithMany("Detalles")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PIA.Models.VarianteProducto", "Variante")
+                        .WithMany()
+                        .HasForeignKey("VarianteProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pedido");
+
+                    b.Navigation("Variante");
+                });
+
             modelBuilder.Entity("PIA.Models.ItemCarrito", b =>
                 {
                     b.HasOne("PIA.Models.VarianteProducto", "Variante")
@@ -380,6 +426,11 @@ namespace PIA.Migrations
                         .IsRequired();
 
                     b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("PIA.Models.Pedido", b =>
+                {
+                    b.Navigation("Detalles");
                 });
 
             modelBuilder.Entity("PIA.Models.Producto", b =>

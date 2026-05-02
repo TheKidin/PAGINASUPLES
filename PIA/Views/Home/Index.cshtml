@@ -4,20 +4,82 @@
     ViewData["Title"] = "Inicio";
 }
 
-<section class="hero-section position-relative overflow-hidden text-center text-white">
-    <div class="hero-overlay d-flex align-items-center justify-content-center">
-        <div class="container hero-content">
-            <h1 class="display-3 fw-black italic text-uppercase" style="letter-spacing: 2px;">Suplementos UANL</h1>
-            <p class="lead fw-bold text-uppercase mt-2" style="letter-spacing: 2px; color: var(--text-muted); font-size: 0.9rem;">
-                Alto rendimiento. Precisión clínica.
-            </p>
-            <a asp-controller="Home" asp-action="Catalogo" class="btn btn-danger btn-lg rounded-0 fw-bold px-5 mt-4 text-uppercase" style="letter-spacing: 2px;">
-                EXPLORAR ARSENAL
-            </a>
-        </div>
+<!-- ========================================== -->
+<!-- HERO CARRUSEL TÁCTICO                      -->
+<!-- ========================================== -->
+<div id="tacticalCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" style="border-bottom: 2px solid var(--accent-color);">
+    
+    <!-- Indicadores (Las rayitas de abajo) -->
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#tacticalCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#tacticalCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#tacticalCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
-</section>
 
+    <div class="carousel-inner">
+        
+        <!-- DIAPOSITIVA 1: PRINCIPAL -->
+        <div class="carousel-item active" data-bs-interval="5000" style="height: 75vh; background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920') center/cover no-repeat;">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100 text-center px-3">
+                <h1 class="fw-black text-white text-uppercase italic mb-2" style="font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: 2px;">
+                    SUPLEMENTOS UANL
+                </h1>
+                <p class="text-uppercase mb-4" style="color: var(--text-muted); font-size: 0.9rem; letter-spacing: 3px;">
+                    ALTO RENDIMIENTO. PRECISIÓN CLÍNICA.
+                </p>
+                <a asp-controller="Home" asp-action="Catalogo" class="btn btn-danger btn-lg rounded-0 fw-bold px-5 mt-2 text-uppercase" style="letter-spacing: 2px;">
+                    EXPLORAR ARSENAL
+                </a>
+            </div>
+        </div>
+
+        <!-- DIAPOSITIVA 2: PROMOCIÓN -->
+        <div class="carousel-item" data-bs-interval="5000" style="height: 75vh; background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1920') center/cover no-repeat;">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100 text-center px-3">
+                <span class="badge bg-danger mb-3 p-2 px-3 text-uppercase fw-bold fs-6" style="letter-spacing: 2px;">⚠️ ALERTA DE DESCUENTO</span>
+                <h1 class="fw-black text-white text-uppercase italic mb-2" style="font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: 2px;">
+                    15% OFF EN PROTEÍNAS
+                </h1>
+                <p class="text-uppercase mb-4" style="color: var(--text-muted); font-size: 0.9rem; letter-spacing: 3px;">
+                    RECUPERACIÓN MUSCULAR ACELERADA. SOLO ESTE MES.
+                </p>
+                <a asp-controller="Home" asp-action="Proteinas" class="btn btn-outline-light btn-lg rounded-0 fw-bold text-uppercase px-5 mt-2" style="letter-spacing: 2px;">
+                    APROVECHAR OFERTA
+                </a>
+            </div>
+        </div>
+
+        <!-- DIAPOSITIVA 3: NUEVOS INGRESOS -->
+        <div class="carousel-item" data-bs-interval="5000" style="height: 75vh; background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1920') center/cover no-repeat;">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100 text-center px-3">
+                <h1 class="fw-black text-white text-uppercase italic mb-2" style="font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: 2px;">
+                    ENERGÍA <span class="text-danger">EXTREMA</span>
+                </h1>
+                <p class="text-uppercase mb-4 text-white fw-bold" style="font-size: 0.9rem; letter-spacing: 3px;">
+                    NUEVOS PRE-ENTRENOS DETECTADOS EN EL RADAR.
+                </p>
+                <a asp-controller="Home" asp-action="PreWorkouts" class="btn btn-danger btn-lg rounded-0 fw-bold text-uppercase px-5 mt-2" style="letter-spacing: 2px;">
+                    VER NUEVO STOCK
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Flechas Laterales -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#tacticalCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+        <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#tacticalCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+        <span class="visually-hidden">Siguiente</span>
+    </button>
+</div>
+
+<!-- ========================================== -->
+<!-- SECCIÓN: MÁS VENDIDOS                      -->
+<!-- ========================================== -->
 <div class="container mt-5 pt-4">
 
     <div class="text-center mb-5">
@@ -28,69 +90,79 @@
     <div class="row g-2 mb-4">
         <div class="col-6 col-md-3">
             <a asp-action="Proteinas" class="category-card-mini">
-                <img src="~/imagenes/gold-standard-whey.jpg" class="img-fluid" alt="Proteinas">
-                    <div class="mini-overlay"><span class="mini-text">Proteínas</span></div>
-                </a>
-            </div>
+                <img src="https://healthysociety.mx/cdn/shop/files/107206001-on-gold-standard-100-whey-choc-5-lbs.png?v=1748572551&width=416" class="img-fluid" alt="Proteinas">
+                <div class="mini-overlay"><span class="mini-text">Proteínas</span></div>
+            </a>
+        </div>
 
-            <div class="col-6 col-md-3">
-                <a asp-action="Aminoacidos" class="category-card-mini">
-                    <img src="~/imagenes/aminopia.png" class="img-fluid" alt="Aminoacidos">
-                        <div class="mini-overlay"><span class="mini-text">Aminoácidos</span></div>
-                    </a>
-                </div>
+        <div class="col-6 col-md-3">
+            <a asp-action="Aminoacidos" class="category-card-mini">
+                <img src="https://healthzone.mx/cdn/shop/files/ONAMINOENERGY_ELECTROLYTES_58db958d-d467-4a1d-806d-2c5927945310.png?v=1716425126" class="img-fluid" alt="Aminoacidos">
+                <div class="mini-overlay"><span class="mini-text">Aminoácidos</span></div>
+            </a>
+        </div>
         
-                <div class="col-6 col-md-3">
-                    <a asp-action="Creatinas" class="category-card-mini">
-                        <img src="~/imagenes/creatinaDragon200.png" class="img-fluid" alt="Creatinas">
-                            <div class="mini-overlay"><span class="mini-text">Creatinas</span></div>
-                        </a>
-                    </div>
+        <div class="col-6 col-md-3">
+            <a asp-action="Creatinas" class="category-card-mini">
+                <img src="https://fitnessmarket.mx/cdn/shop/files/CreatinaMonohidratada1kg-creatina-dragonpharma-1_1200x1200.png?v=1736703196" class="img-fluid" alt="Creatinas">
+                <div class="mini-overlay"><span class="mini-text">Creatinas</span></div>
+            </a>
+        </div>
 
-                    <div class="col-6 col-md-3">
-                        <a asp-action="PreWorkouts" class="category-card-mini">
-                            <img src="~/imagenes/prefresaK.png" class="img-fluid" alt="Pre-entreno">
-                                <div class="mini-overlay"><span class="mini-text">Pre-Workouts</span></div>
-                            </a>
-                        </div>
-                    </div>
+        <div class="col-6 col-md-3">
+            <a asp-action="PreWorkouts" class="category-card-mini">
+                <img src="https://imgs.search.brave.com/nZVdq3xUR9achHHzqDb99Im2KxtMLSYptVEqs_A_FdM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYXB0/YWlubnV0cml0aW9u/Lm14L2Nkbi9zaG9w/L2ZpbGVzLzYwMHg2/MDAtcmVuZGVyLXZl/bm9tLWluZmVybm8t/ZHJhZ29ucy1ibG9v/ZC0yXzEwMjR4MTAy/NF8yeC0xLndlYnA_/dj0xNzA3NDM3MDk3/JndpZHRoPXt3aWR0/aH0" class="img-fluid" alt="Pre-entreno">
+                <div class="mini-overlay"><span class="mini-text">Pre-Workouts</span></div>
+            </a>
+        </div>
+    </div>
 
-                    <div class="text-center mb-5 mt-4">
-                        <a asp-action="Catalogo" class="btn btn-dark rounded-0 px-4 fw-bold btn-sm text-uppercase" style="letter-spacing: 1px;">VER TODOS</a>
-                    </div>
+    <div class="text-center mb-5 mt-4">
+        <a asp-action="Catalogo" class="btn btn-dark rounded-0 px-4 fw-bold btn-sm text-uppercase" style="letter-spacing: 1px;">VER TODOS</a>
+    </div>
 
-                    <hr class="my-5" style="border-color: var(--border-color);">
+    <hr class="my-5" style="border-color: var(--border-color);">
 
-                    <div class="text-center mb-5">
-                        <h3 class="fw-bold text-uppercase italic section-title">Nuevos Lanzamientos</h3>
-                        <div class="underline mx-auto"></div>
-                    </div>
+    <!-- ========================================== -->
+    <!-- SECCIÓN: NUEVOS LANZAMIENTOS (SLIDER)      -->
+    <!-- ========================================== -->
+    <div class="text-center mb-5">
+        <h3 class="fw-bold text-uppercase italic section-title">Nuevos Lanzamientos</h3>
+        <div class="underline mx-auto"></div>
+    </div>
 
-                    <div class="row row-cols-2 row-cols-md-4 g-4 mb-5">
-                        @if (Model != null && Model.Any())
-                        {
-                            @foreach (var item in Model)
+    <!-- Contenedor Deslizable -->
+    <div class="product-scroller d-flex flex-nowrap gap-4 mb-5 px-3">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <!-- Sin scroll-snap para permitir el movimiento por JavaScript -->
+                <div class="flex-shrink-0" style="width: 280px;">
+                    <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none">
+                        <div class="card h-100 border-0 shadow-sm product-card" style="background-color: var(--surface-dark);">
+                            
+                            @if (string.IsNullOrEmpty(item.ImagenUrl))
                             {
-                                <div class="col">
-                                    <a asp-controller="Home" asp-action="Detalle" asp-route-id="@item.Id" class="text-decoration-none">
-                                        <div class="card h-100 border-0 shadow-sm product-card">
-                            
-                                            <img src="https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=300" class="card-img-top p-3" alt="@item.Nombre">
-                            
-                                            <div class="card-body text-center">
-                                                <h6 class="card-title fw-bold small mb-1 text-uppercase" style="color: var(--text-main);">@item.Nombre</h6>
-                                                <p class="text-danger fw-bold mb-3">$@item.Precio.ToString("N2")</p>
-                                
-                                                <span class="btn btn-buy btn-sm rounded-0 w-100 fw-bold text-uppercase">VER DETALLE</span>
-                                            </div>
-                                        </div>
-                                    </a>
+                                <div class="card-img-top p-3 d-flex justify-content-center align-items-center" style="height: 250px; background-color: #111;">
+                                    <i class="bi bi-box-seam text-secondary" style="font-size: 4rem;"></i>
                                 </div>
                             }
-                        }
-                    </div>
-
-                    <div class="text-center mt-5 mb-5">
-                        <a asp-action="Nuevo" class="btn btn-dark rounded-0 px-4 fw-bold btn-sm text-uppercase" style="letter-spacing: 1px;">Todos los Lanzamientos</a>
-                    </div>
+                            else
+                            {
+                                <img src="@item.ImagenUrl" class="card-img-top p-3" alt="@item.Nombre" style="height: 250px; object-fit: contain;">
+                            }
+                            
+                            <div class="card-body text-center d-flex flex-column">
+                                <h6 class="card-title fw-bold small mb-1 text-uppercase title-hover" style="color: var(--text-main);">@item.Nombre</h6>
+                                <p class="text-danger fw-bold mb-3 mt-auto">$@item.Precio.ToString("N2")</p>
+                                
+                                <span class="btn btn-buy btn-sm rounded-0 w-100 fw-bold text-uppercase mt-auto">VER DETALLE</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
+            }
+        }
+    </div>
+</div>

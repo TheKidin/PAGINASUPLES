@@ -16,6 +16,6 @@
     Cálculo final de envío e impuestos se procesará en el pago.
 </div>
 
-<button class="btn btn-danger btn-lg rounded-0 w-100 fw-black py-3 mt-4 text-uppercase btn-cart-premium" style="letter-spacing: 2px;" @(totalEstimado == 0 ? "disabled" : "")>
-    <i class="bi bi-shield-lock-fill me-2 fs-6"></i> PROCEDER AL PAGO TÁCTICO
-</button>
+<a asp-controller="Pedidos" asp-action="Checkout" class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-3 d-flex justify-content-center align-items-center" style="letter-spacing: 2px;">
+    <i class="bi bi-shield-lock-fill me-2"></i> PROCEDER AL PAGO TÁCTICO
+</a>
