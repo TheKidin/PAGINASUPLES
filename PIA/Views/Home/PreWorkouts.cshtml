@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Pre-Workouts";
+    
+    // Recuperamos los filtros del servidor para mantenerlos marcados
+    var tiposSeleccionados = ViewBag.TiposSeleccionados as List<string> ?? new List<string>();
+    var marcaSeleccionada = ViewBag.MarcaSeleccionada as string ?? "";
 }
 
 <div class="container mt-4 mb-5">
@@ -17,26 +21,31 @@
     <div class="row">
         
         <div class="col-lg-3 mb-4 mb-lg-0">
-            <div class="card p-4 rounded-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+            <form method="get" asp-controller="Home" asp-action="PreWorkouts" class="card p-4 rounded-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
                 <h5 class="fw-black text-white text-uppercase mb-4" style="letter-spacing: 1px;">Filtros</h5>
 
                 <div class="mb-4">
                     <h6 class="text-white fw-bold text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">Nivel de Energía</h6>
                     
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="filtroEstimulante">
+                        <input class="form-check-input" type="checkbox" name="tipos" value="Con Estimulantes" id="filtroEstimulante"
+                        @(tiposSeleccionados.Contains("Con Estimulantes") ? "checked" : "")>
                         <label class="form-check-label text-white" for="filtroEstimulante" style="font-size: 0.85rem;">
                             Con Cafeína (Estimulante)
                         </label>
                     </div>
+                    
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="filtroPump">
+                        <input class="form-check-input" type="checkbox" name="tipos" value="Pump (Sin Estimulantes)" id="filtroPump"
+                        @(tiposSeleccionados.Contains("Pump (Sin Estimulantes)") ? "checked" : "")>
                         <label class="form-check-label text-white" for="filtroPump" style="font-size: 0.85rem;">
                             Sin Cafeína (Pump)
                         </label>
                     </div>
+                    
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="filtroTermo">
+                        <input class="form-check-input" type="checkbox" name="tipos" value="Termogenico" id="filtroTermo"
+                        @(tiposSeleccionados.Contains("Termogenico") ? "checked" : "")>
                         <label class="form-check-label text-white" for="filtroTermo" style="font-size: 0.85rem;">
                             Termogénico (Quema Grasa)
                         </label>
@@ -45,24 +54,35 @@
 
                 <div class="mb-4">
                     <h6 class="text-white fw-bold text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">Marca</h6>
-                    <select class="form-select text-white rounded-0" style="background-color: var(--main-black); border: 1px solid var(--border-color); font-size: 0.85rem;">
-                        <option selected>Todas las marcas</option>
-                        <option value="1">Dragon Pharma</option>
-                        <option value="2">Optimum Nutrition</option>
+                    <select name="marca" class="form-select text-white rounded-0" style="background-color: var(--main-black); border: 1px solid var(--border-color); font-size: 0.85rem;">
+                        <option value="" selected="@(string.IsNullOrEmpty(marcaSeleccionada))">Todas las marcas</option>
+                        <option value="Dragon Pharma" selected="@(marcaSeleccionada == "Dragon Pharma")">Dragon Pharma</option>
+                        <option value="Optimun Nutrition" selected="@(marcaSeleccionada == "Optimun Nutrition")">Optimun Nutrition</option>
                     </select>
                 </div>
 
-                <button class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-2 mt-2" style="letter-spacing: 1px;">
+                <button type="submit" class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-2 mt-2" style="letter-spacing: 1px;">
                     Aplicar Filtros
                 </button>
-            </div>
+            </form>
         </div>
 
         <div class="col-lg-9">
             
             <div class="d-flex justify-content-between align-items-end mb-4 border-bottom pb-2" style="border-color: var(--border-color) !important;">
                 <h2 class="fw-black text-white text-uppercase italic mb-0" style="letter-spacing: 1px; font-size: 2rem;">PRE-WORKOUTS</h2>
-                <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) productos</span>
+                
+                @if (tiposSeleccionados.Any() || !string.IsNullOrEmpty(marcaSeleccionada))
+                {
+                    <div>
+                        <a asp-action="PreWorkouts" class="text-danger small text-decoration-none me-3"><i class="bi bi-x-circle me-1"></i>Limpiar Filtros</a>
+                        <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) resultados</span>
+                    </div>
+                }
+                else
+                {
+                    <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) productos</span>
+                }
             </div>
 
             @if (Model != null && Model.Any())
@@ -116,8 +136,9 @@
             {
                 <div class="text-center py-5 mt-4" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
                     <i class="bi bi-x-octagon text-muted mb-3" style="font-size: 3rem;"></i>
-                    <h4 class="text-white text-uppercase fw-bold italic">Sin inventario</h4>
-                    <p class="text-muted">Aún no has agregado suplementos a esta categoría.</p>
+                    <h4 class="text-white text-uppercase fw-bold italic">Sin resultados</h4>
+                    <p class="text-muted">No encontramos armamento que coincida con esos filtros.</p>
+                    <a asp-action="PreWorkouts" class="btn btn-danger mt-3 rounded-0 text-uppercase fw-bold">Limpiar Búsqueda</a>
                 </div>
             }
 

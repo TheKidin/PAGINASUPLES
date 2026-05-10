@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Aminoácidos";
+    
+    // Recuperamos los filtros del servidor para mantener la memoria táctica
+    var tiposSeleccionados = ViewBag.TiposSeleccionados as List<string> ?? new List<string>();
+    var marcaSeleccionada = ViewBag.MarcaSeleccionada as string ?? "";
 }
 
 <div class="container mt-4 mb-5">
@@ -17,25 +21,31 @@
     <div class="row">
         
         <div class="col-lg-3 mb-4 mb-lg-0">
-            <div class="card p-4 rounded-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+            <form method="get" asp-controller="Home" asp-action="Aminoacidos" class="card p-4 rounded-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
                 <h5 class="fw-black text-white text-uppercase mb-4" style="letter-spacing: 1px;">Filtros</h5>
 
                 <div class="mb-4">
                     <h6 class="text-white fw-bold text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">TIPO DE AMINOÁCIDO</h6>
+                    
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="bcaa">
+                        <input class="form-check-input" type="checkbox" name="tipos" value="BCAAs" id="bcaa"
+                        @(tiposSeleccionados.Contains("BCAAs") ? "checked" : "")>
                         <label class="form-check-label text-white" for="bcaa" style="font-size: 0.85rem;">
                             BCAAs (Ramificados)
                         </label>
                     </div>
+                    
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="eaa">
+                        <input class="form-check-input" type="checkbox" name="tipos" value="EAAs" id="eaa"
+                        @(tiposSeleccionados.Contains("EAAs") ? "checked" : "")>
                         <label class="form-check-label text-white" for="eaa" style="font-size: 0.85rem;">
                             EAAs (Esenciales)
                         </label>
                     </div>
+                    
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="glutamina">
+                        <input class="form-check-input" type="checkbox" name="tipos" value="Glutamina" id="glutamina"
+                        @(tiposSeleccionados.Contains("Glutamina") ? "checked" : "")>
                         <label class="form-check-label text-white" for="glutamina" style="font-size: 0.85rem;">
                             Glutamina
                         </label>
@@ -44,27 +54,39 @@
 
                 <div class="mb-4">
                     <h6 class="text-white fw-bold text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">MARCA</h6>
-                    <select class="form-select text-white rounded-0" style="background-color: var(--main-black); border: 1px solid var(--border-color); font-size: 0.85rem;">
-                        <option selected>Todas las marcas</option>
-                        <option>Xtend</option>
-                        <option>Mutant</option>
-                        <option>BSN</option>
-                        <option>Optimum Nutrition</option>
-                        <option>Dragon Pharma</option>
+                    <select name="marca" class="form-select text-white rounded-0" style="background-color: var(--main-black); border: 1px solid var(--border-color); font-size: 0.85rem;">
+                        <option value="" selected="@(string.IsNullOrEmpty(marcaSeleccionada))">Todas las marcas</option>
+                        
+                        <option value="Xtend" selected="@(marcaSeleccionada == "Xtend")">Xtend</option>
+                        <option value="Mutant" selected="@(marcaSeleccionada == "Mutant")">Mutant</option>
+                        <option value="BSN" selected="@(marcaSeleccionada == "BSN")">BSN</option>
+                        <option value="Optimun Nutrition" selected="@(marcaSeleccionada == "Optimun Nutrition")">Optimun Nutrition</option>
+                        <option value="Dragon Pharma" selected="@(marcaSeleccionada == "Dragon Pharma")">Dragon Pharma</option>
                     </select>
                 </div>
 
-                <button class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-2 mt-2" style="letter-spacing: 1px;">
+                <button type="submit" class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-2 mt-2" style="letter-spacing: 1px;">
                     Aplicar Filtros
                 </button>
-            </div>
+            </form>
         </div>
 
         <div class="col-lg-9">
             
             <div class="d-flex justify-content-between align-items-end mb-4 border-bottom pb-2" style="border-color: var(--border-color) !important;">
                 <h2 class="fw-black text-white text-uppercase italic mb-0" style="letter-spacing: 1px; font-size: 2rem;">AMINOÁCIDOS</h2>
-                <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) productos</span>
+                
+                @if (tiposSeleccionados.Any() || !string.IsNullOrEmpty(marcaSeleccionada))
+                {
+                    <div>
+                        <a asp-action="Aminoacidos" class="text-danger small text-decoration-none me-3"><i class="bi bi-x-circle me-1"></i>Limpiar Filtros</a>
+                        <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) resultados</span>
+                    </div>
+                }
+                else
+                {
+                    <span class="text-muted small">Mostrando @(Model?.Count() ?? 0) productos</span>
+                }
             </div>
 
             @if (Model != null && Model.Any())
@@ -118,8 +140,9 @@
             {
                 <div class="text-center py-5 mt-4" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
                     <i class="bi bi-x-octagon text-muted mb-3" style="font-size: 3rem;"></i>
-                    <h4 class="text-white text-uppercase fw-bold italic">Sin inventario</h4>
-                    <p class="text-muted">Aún no hay aminoácidos registrados en tu arsenal.</p>
+                    <h4 class="text-white text-uppercase fw-bold italic">Sin resultados</h4>
+                    <p class="text-muted">No encontramos armamento que coincida con esos filtros.</p>
+                    <a asp-action="Aminoacidos" class="btn btn-danger mt-3 rounded-0 text-uppercase fw-bold">Limpiar Búsqueda</a>
                 </div>
             }
 
