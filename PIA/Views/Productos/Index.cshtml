@@ -4,6 +4,8 @@
     ViewData["Title"] = "Panel de Control";
 }
 
+
+
 <div class="container mt-5 mb-5 pt-3">
     
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center border-bottom border-secondary pb-3 mb-4">
@@ -18,6 +20,20 @@
     <div class="card bg-transparent border-secondary shadow-lg rounded-4 overflow-hidden">
         <div class="card-body p-0">
             <div class="table-responsive">
+                
+                <div class="row mb-4 pt-3 px-3">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="input-group" style="border: 1px solid var(--border-color);">
+                            <span class="input-group-text border-0 rounded-0" style="background-color: #141414; color: var(--accent-color);">
+                                <i class="bi bi-search text-danger"></i>
+                            </span>
+                            <input type="text" id="busquedaArsenal" class="form-control border-0 rounded-0 text-white"
+                                   style="background-color: #141414; box-shadow: none;"
+                                   placeholder="Buscar nombre, marca o precio...">
+                        </div>
+                    </div>
+                </div>
+
                 <table class="table table-dark table-hover align-middle mb-0 text-white">
                     <thead class="table-active border-bottom border-secondary">
                         <tr>
@@ -69,3 +85,29 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Escuchamos cada vez que se teclea algo en el buscador
+        document.getElementById('busquedaArsenal').addEventListener('keyup', function() {
+            
+            // Pasamos a minúsculas lo que escribiste para que la búsqueda sea exacta
+            let textoBuscado = this.value.toLowerCase();
+            
+            // Seleccionamos todas las filas del cuerpo de la tabla
+            let filas = document.querySelectorAll('table tbody tr');
+
+            filas.forEach(function(fila) {
+                // Obtenemos todo el texto que está dentro de esa fila (Nombre, Marca, Precio, etc.)
+                let contenidoFila = fila.textContent.toLowerCase();
+                
+                // Si la fila contiene lo que buscamos, la dejamos visible. Si no, la ocultamos.
+                if (contenidoFila.includes(textoBuscado)) {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

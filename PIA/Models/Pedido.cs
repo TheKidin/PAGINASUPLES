@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic; // ⚠️ Necesario para usar List<>
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PIA.Models
@@ -7,18 +7,22 @@ namespace PIA.Models
     public class Pedido
     {
         [Key]
-        public int Id { get; set; } // El número de orden táctica
+        public int Id { get; set; }
 
-        [Required]
-        public string UsuarioId { get; set; } // Para saber de qué cliente es este pedido
+        public string UsuarioId { get; set; } = string.Empty;
+        public DateTime FechaCompra { get; set; }
+        public decimal Total { get; set; }
 
-        public DateTime Fecha { get; set; } // Cuándo se hizo el despliegue
+        // Datos de Entrega
+        [Required(ErrorMessage = "La dirección es obligatoria para el despliegue")]
+        public string Direccion { get; set; } = string.Empty;
 
-        public string Estado { get; set; } // Ej. "Procesando", "En Camino", "Entregado"
+        [Required(ErrorMessage = "La ciudad es necesaria para calcular la logística")]
+        public string Ciudad { get; set; } = string.Empty;
 
-        public decimal Total { get; set; } // El total invertido
+        public string Estatus { get; set; } = "Preparando Arsenal"; // Estatus inicial
+        public DateTime FechaEntregaEstimada { get; set; }
 
-        // ⚠️ LA MOCHILA TÁCTICA: Aquí se guardará la lista de todo lo que compró
         public List<DetallePedido> Detalles { get; set; } = new List<DetallePedido>();
     }
 }

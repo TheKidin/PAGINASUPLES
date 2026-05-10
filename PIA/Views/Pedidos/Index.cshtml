@@ -21,11 +21,11 @@
                 @if (Model != null && Model.Any())
                 {
                     <div class="table-responsive">
-                        <table class="table table-dark table-striped table-hover table-borderless align-middle mb-0">
+                        <table class="table table-dark table-hover table-borderless align-middle mb-0" style="border-collapse: collapse;">
                             <thead style="border-bottom: 2px solid var(--accent-color);">
                                 <tr class="text-uppercase small" style="letter-spacing: 1px; color: var(--text-muted);">
                                     <th scope="col" class="py-3">Número de Orden</th>
-                                    <th scope="col" class="py-3 text-center">Fecha</th>
+                                    <th scope="col" class="py-3 text-center">Fecha Compra</th>
                                     <th scope="col" class="py-3 text-center">Estado</th>
                                     <th scope="col" class="py-3 text-end">Total</th>
                                     <th scope="col" class="py-3 text-center">Acción</th>
@@ -34,23 +34,70 @@
                             <tbody>
                                 @foreach (var pedido in Model)
                                 {
-                                    <tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                                         <td class="py-4 fw-black" style="color: var(--text-main); font-size: 0.9rem;">
                                             #ORDEN-TÁCTICA-@pedido.Id.ToString("D4")
                                         </td>
-                                        <td class="py-4 text-center">@pedido.Fecha.ToString("dd MMM, yyyy")</td>
+                                        <td class="py-4 text-center">@pedido.FechaCompra.ToString("dd MMM, yyyy")</td>
                                         <td class="py-4 text-center">
-                                            <span class="badge @(pedido.Estado == "Entregado" ? "bg-success" : "bg-warning text-dark") px-3 py-2 rounded-0 text-uppercase small" style="font-size: 0.65rem;">
-                                                @pedido.Estado
+                                            <span class="badge @(pedido.Estatus == "Entregado" ? "bg-success" : "bg-warning text-dark") px-3 py-2 rounded-0 text-uppercase small" style="font-size: 0.65rem;">
+                                                @pedido.Estatus
                                             </span>
                                         </td>
                                         <td class="py-4 text-end text-danger fw-black fs-6">
                                             $@pedido.Total.ToString("N2")
                                         </td>
                                         <td class="py-4 text-center">
-                                            <a asp-action="Detalles" asp-route-id="@pedido.Id" class="btn btn-sm btn-outline-light rounded-0 fw-bold" style="letter-spacing: 1px; font-size: 0.7rem;">
-                                                <i class="bi bi-eye-fill"></i> DETALLES DE MISIÓN
-                                            </a>
+                                            <button class="btn btn-sm btn-outline-light rounded-0 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#mision-@pedido.Id" aria-expanded="false" style="letter-spacing: 1px; font-size: 0.7rem;">
+                                                <i class="bi bi-crosshair"></i> INSPECCIONAR
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="5" class="p-0 border-0">
+                                            <div class="collapse" id="mision-@pedido.Id">
+                                                <div class="p-4" style="background-color: #0a0a0a; border-bottom: 2px solid #333;">
+                                                    
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h6 class="text-danger fw-bold mb-0 text-uppercase" style="letter-spacing: 1px;">
+                                                            <i class="bi bi-box-seam"></i> Manifiesto de Carga
+                                                        </h6>
+                                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 1px;">
+                                                            ⚡ Llegada Estimada: <span class="text-warning">@pedido.FechaEntregaEstimada.ToString("dd MMM, yyyy")</span>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="d-flex flex-wrap gap-3">
+                                                        @if (pedido.Detalles != null)
+                                                        {
+                                                            @foreach (var detalle in pedido.Detalles)
+                                                            {
+                                                                <div class="d-flex align-items-center p-2" style="border: 1px solid #333; background-color: #141414; min-width: 280px;">
+                                                                    <div style="width: 60px; height: 60px; background-color: #000;" class="d-flex justify-content-center align-items-center p-1 me-3 border border-secondary">
+                                                                        <img src="@(detalle.Variante?.Producto?.ImagenUrl ?? "https://images.unsplash.com/photo-1593095191071-82b63de74e17?w=600")"
+                                                                             class="img-fluid" style="object-fit: contain; max-height: 100%;" />
+                                                                    </div>
+                                                                    
+                                                                    <div>
+                                                                        <p class="mb-0 text-white fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">
+                                                                            @(detalle.Variante?.Producto?.Nombre ?? "Suplemento Desconocido")
+                                                                        </p>
+                                                                        <small class="text-muted d-block" style="font-size: 0.7rem;">Sabor: @(detalle.Variante?.Sabor ?? "N/A")</small>
+                                                                        <small class="text-danger fw-bold d-block" style="font-size: 0.75rem;">
+                                                                            Cant: @detalle.Cantidad x $@detalle.Precio.ToString("N2")
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                    
+                                                    <div class="mt-3 pt-3 border-top border-secondary text-muted small text-uppercase">
+                                                        <i class="bi bi-geo-alt-fill text-danger"></i> <strong>Coordenadas de Despliegue:</strong> @pedido.Direccion, @pedido.Ciudad
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 }

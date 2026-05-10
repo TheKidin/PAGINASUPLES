@@ -154,5 +154,69 @@ namespace PIA.Controllers
 
             return View(pedido);
         }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ConfirmarCompra(string direccion, string ciudad)
+        {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var carrito = await _context.ItemCarritos
+                .Where(c => c.UsuarioId == usuarioId)
+                .Include(c => c.Variante)
+                    .ThenInclude(v => v.Producto)
+                .ToListAsync();
+
+            if (!carrito.Any()) return RedirectToAction("Index", "Carrito");
+
+            // --- CÁLCULO TÁCTICO DE ENTREGA ---
+            DateTime entrega = DateTime.Now.AddDays(2); // Por defecto 48hrs
+            DateTime ahora = DateTime.Now;
+
+            // REGLA MTY: Si es Monterrey y antes de la 1:00 PM (13:00 hrs)
+            if (ciudad.ToLower().Contains("monterrey") || ciudad.ToLower().Contains("mty"))
+            {
+                if (ahora.Hour < 13)
+                {
+                    entrega = ahora; // ⚡ ENVÍO HOY MISMO
+                }
+                else
+                {
+                    entrega = ahora.AddDays(1); // Mañana
+                }
+            }
+
+            // --- CREAR EL REGISTRO DE OPERACIÓN ---
+            var nuevoPedido = new Pedido
+            {
+                UsuarioId = usuarioId!,
+                FechaCompra = ahora,
+                Total = carrito.Sum(x => (x.Variante?.Producto?.Precio ?? 0) * x.Cantidad),
+                Direccion = direccion,
+                Ciudad = ciudad,
+                Estatus = "En Preparación",
+                FechaEntregaEstimada = entrega
+            };
+
+            _context.Pedidos.Add(nuevoPedido);
+            await _context.SaveChangesAsync();
+
+            // --- PASAR LOS PRODUCTOS AL HISTORIAL ---
+            foreach (var item in carrito)
+            {
+                var detalle = new DetallePedido
+                {
+                    PedidoId = nuevoPedido.Id,
+                    VarianteProductoId = item.VarianteId,
+                    Cantidad = item.Cantidad,
+                    Precio = item.Variante?.Producto?.Precio ?? 0
+                };
+                _context.DetallesPedido.Add(detalle);
+            }
+
+            // Limpiar el carrito del soldado
+            _context.ItemCarritos.RemoveRange(carrito);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Confirmacion", new { id = nuevoPedido.Id });
+        }
     }
 }

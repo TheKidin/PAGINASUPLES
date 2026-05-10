@@ -851,3 +851,8 @@ small, .small {
     color: #111 !important; /* Letras casi negras para máximo contraste */
     font-weight: 900 !important;
 }
+
+#busquedaArsenal::placeholder {
+    color: #ffffff !important;
+    opacity: 0.7;
+}
