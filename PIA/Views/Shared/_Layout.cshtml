@@ -1,6 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using PIA.Data
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject ApplicationDbContext _context
+
+@{
+    bool alertaEncendida = false;
+    
+    // 🛡️ ESCÁNER INTELIGENTE: Solo escaneamos la base de datos si eres tú (el Administrador)
+    if (SignInManager.IsSignedIn(User) && User.Identity?.Name == "SMUANL2026@hotmail.com")
+    {
+        // Entramos por Productos y escaneamos todas sus Variantes
+        alertaEncendida = _context.Productos.SelectMany(p => p.Variantes).Any(v => v.Stock <= 5);
+    }
+}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -61,9 +74,13 @@
                             <li class="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center">
                                 <a class="nav-link position-relative text-warning custom-link" asp-controller="Productos" asp-action="StockBajo" style="transition: 0.3s;">
                                     <i class="bi bi-exclamation-triangle-fill me-1"></i> ALERTA STOCK
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem; padding: 3px 5px;">
-                                        !
-                                    </span>
+                                    
+                                    @if (alertaEncendida)
+                                    {
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem; padding: 3px 5px;">
+                                            !
+                                        </span>
+                                    }
                                 </a>
                             </li>
                         }
