@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration; // 🛡️ Necesario para leer la bóv
 using System; // Necesario para calcular fechas y horas
 using System.Linq;
 using PIA.Services; // 🛡️ Para el servicio de correos
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PIA.Controllers
 {
@@ -298,13 +300,13 @@ namespace PIA.Controllers
             // 6. GUARDAR CAMBIOS FINALES
             await _context.SaveChangesAsync();
 
-            // 📨 7. LANZAR TRANSMISIÓN AL SOLDADO (EMAIL)
+            // 📨 7. LANZAR TRANSMISIÓN AL SOLDADO (CLIENTE)
             string correoCliente = User.Identity?.Name ?? "";
 
             if (!string.IsNullOrEmpty(correoCliente))
             {
-                string asunto = $"Misión Confirmada: Orden #{nuevoPedido.Id.ToString("D4")} - SMUANL Performance";
-                string html = $@"
+                string asuntoCliente = $"Misión Confirmada: Orden #{nuevoPedido.Id.ToString("D4")} - SMUANL Performance";
+                string htmlCliente = $@"
                     <div style='background-color:#050505; color:#ffffff; font-family:Arial, sans-serif; padding:30px; border: 2px solid #222;'>
                         <h2 style='color:#dc3545; font-style:italic; letter-spacing:2px;'>SMUANL PERFORMANCE</h2>
                         <h3 style='border-bottom: 1px solid #333; padding-bottom: 10px;'>REPORTE DE OPERACIÓN LOGÍSTICA</h3>
@@ -318,11 +320,33 @@ namespace PIA.Controllers
                         <p style='margin-top:20px; font-size:12px; color:#aaa;'>Mantente alerta a los radares para futuras actualizaciones del estatus.</p>
                     </div>";
 
-                // Enviamos en segundo plano para no demorar la respuesta
-                _ = _emailSender.EnviarCorreoAsync(correoCliente, asunto, html);
+                // Enviamos recibo al cliente en segundo plano
+                _ = _emailSender.EnviarCorreoAsync(correoCliente, asuntoCliente, htmlCliente);
             }
 
-            // 8. REDIRECCIÓN FINAL
+           
+            string correoAdmin = "suplementosuanl@gmail.com";
+
+            if (!string.IsNullOrEmpty(correoAdmin))
+            {
+                string asuntoAdmin = $"⚠️ NUEVA VENTA DETECTADA: Orden #{nuevoPedido.Id.ToString("D4")}";
+                string htmlAdmin = $@"
+                    <div style='background-color:#111; color:#fff; font-family:Arial, sans-serif; padding:20px; border:1px solid #dc3545;'>
+                        <h2 style='color:#dc3545;'>¡TENEMOS UNA VENTA!</h2>
+                        <p>Un soldado ha adquirido armamento. Revisa el panel de control para preparar el envío.</p>
+                        <hr style='border-color:#333;' />
+                        <p><strong>Monto:</strong> ${nuevoPedido.Total.ToString("N2")} MXN</p>
+                        <p><strong>Cliente:</strong> {correoCliente}</p>
+                        <p><strong>Destino:</strong> {ciudadEntrega}</p>
+                        <br>
+                        <a href='{Request.Scheme}://{Request.Host}/Pedidos/AdminIndex' style='background-color:#dc3545; color:white; padding:10px 15px; text-decoration:none; font-weight:bold;'>Ir al Panel de Control</a>
+                    </div>";
+
+                // Enviamos la alerta al administrador en segundo plano
+                _ = _emailSender.EnviarCorreoAsync(correoAdmin, asuntoAdmin, htmlAdmin);
+            }
+
+            // 9. REDIRECCIÓN FINAL
             return RedirectToAction("Index", "Pedidos");
         }
     }
