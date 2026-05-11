@@ -1,0 +1,128 @@
+﻿@model IEnumerable<PIA.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Centro de Mando - Pedidos";
+}
+
+<div class="container mt-5 pt-4 mb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-black text-uppercase italic text-white" style="letter-spacing: 2px;">GESTIÓN GLOBAL DE PEDIDOS</h2>
+        <p class="text-danger fw-bold small text-uppercase">MODO ADMINISTRADOR: CONTROL TOTAL DEL ARSENAL</p>
+    </div>
+
+    <div class="card p-4 rounded-0" style="background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+        <div class="table-responsive">
+            <table class="table table-dark align-middle mb-0">
+                <thead class="text-uppercase small text-muted" style="border-bottom: 2px solid #333;">
+                    <tr>
+                        <th>Orden</th>
+                        <th>Soldado (Email)</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estatus Actual</th>
+                        <th class="text-center">Actualizar Radar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr style="border-bottom: 1px solid #222;">
+                            <td class="fw-bold">#@p.Id.ToString("D4")</td>
+                            <td class="small text-truncate" style="max-width: 150px;" title="@p.UsuarioId">@p.UsuarioId</td>
+                            <td>@p.FechaCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-danger fw-bold">$@p.Total.ToString("N2")</td>
+                            <td>
+                                <span class="badge @(p.Estatus == "Entregado" ? "bg-success" : "bg-warning text-dark") rounded-0 text-uppercase" style="font-size: 0.6rem;">
+                                    @p.Estatus
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2 align-items-center">
+                                    @* 👁️ Botón para ver detalles (Siempre visible) *@
+                                    <button class="btn btn-sm btn-outline-light rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#admin-mision-@p.Id" aria-expanded="false">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    
+                                    @* 🔒 PROTOCOLO DE CANDADO VISUAL *@
+                                    @if (p.Estatus == "Entregado" || p.Estatus == "Cancelado")
+                                    {
+                                        <span class="badge bg-dark border border-secondary text-secondary px-3 py-2 rounded-0" style="font-size: 0.7rem; letter-spacing: 1px;">
+                                            <i class="bi bi-lock-fill"></i> CERRADO
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @* 🟢 Formulario de actualización (Solo si está activo) *@
+                                        <form asp-action="ActualizarEstatus" method="post" class="d-flex gap-1 mb-0">
+                                            <input type="hidden" name="id" value="@p.Id" />
+                                            <select name="nuevoEstatus" class="form-select form-select-sm rounded-0 bg-black text-white border-secondary" style="font-size: 0.75rem; width: 140px;">
+                                                <option value="Pagado y Preparando Arsenal">Preparando</option>
+                                                <option value="Enviado a Coordenadas">Enviado</option>
+                                                <option value="Entregado">Entregado</option>
+                                                <option value="Cancelado">Cancelado</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-danger btn-sm rounded-0">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="6" class="p-0 border-0">
+                                <div class="collapse" id="admin-mision-@p.Id">
+                                    <div class="p-4" style="background-color: #0a0a0a; border-bottom: 2px solid var(--accent-color);">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3 mb-md-0">
+                                                <h6 class="text-danger fw-bold mb-2 text-uppercase" style="letter-spacing: 1px;">
+                                                    <i class="bi bi-geo-alt-fill"></i> Coordenadas de Despliegue
+                                                </h6>
+                                                <div class="p-3" style="background-color: #141414; border: 1px solid #333;">
+                                                    <p class="mb-1 text-white small text-uppercase"><strong>Dirección:</strong> @p.Direccion</p>
+                                                    <p class="mb-0 text-white small text-uppercase"><strong>Ciudad/Estado:</strong> @p.Ciudad</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mt-4 mt-md-0">
+                                                <h6 class="text-warning fw-bold mb-3 text-uppercase" style="letter-spacing: 1px;">
+                                                    <i class="bi bi-box-seam"></i> Manifiesto de Carga
+                                                </h6>
+                                                <div class="d-flex flex-column gap-3">
+                                                    @if (p.Detalles != null)
+                                                    {
+                                                        @foreach (var detalle in p.Detalles)
+                                                        {
+                                                            <div class="d-flex align-items-center p-3" style="background-color: #141414; border: 1px solid #333;">
+                    
+                                                                <div style="width: 85px; height: 85px; background-color: #000;" class="d-flex justify-content-center align-items-center p-2 me-4 border border-secondary flex-shrink-0">
+                                                                    <img src="@(detalle.Variante?.Producto?.ImagenUrl ?? "https://dummyimage.com/200x200/cccccc/000000.png&text=Sin+Imagen")" class="img-fluid" style="object-fit: contain; max-height: 100%;" />
+                                                                </div>
+                    
+                                                                <div>
+                                                                    <h6 class="mb-1 text-white fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.95rem;">
+                                                                        <span class="text-danger fs-5 me-1">@detalle.Cantidad x</span> @(detalle.Variante?.Producto?.Nombre ?? "Desconocido")
+                                                                    </h6>
+                                                                    <span class="text-muted d-block mb-1" style="font-size: 0.85rem;">Sabor: @(detalle.Variante?.Sabor ?? "N/A")</span>
+                                                                    <span class="text-white fw-bold d-block" style="font-size: 0.95rem;">$@detalle.Precio.ToString("N2") <small class="text-muted fw-normal">c/u</small></span>
+                                                                </div>
+                    
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

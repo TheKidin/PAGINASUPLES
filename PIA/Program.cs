@@ -15,10 +15,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // 2. Configurar ASP.NET Core Identity (El sistema de Usuarios)
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<PIA.Services.EmailSenderService>();
 
 var app = builder.Build();
 

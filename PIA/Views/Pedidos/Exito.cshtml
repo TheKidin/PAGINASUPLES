@@ -13,22 +13,27 @@
         <div class="underline mx-auto border-success mb-4" style="width: 50px; border-top: 3px solid;"></div>
         
         <p class="text-muted fs-5 mb-4">
-            Tu pago ha sido procesado de manera segura en la bóveda de PayPal. Nuestro equipo logístico ya está preparando tu arsenal para la extracción.
+            Tu pago ha sido procesado de manera segura en la bóveda de **Stripe**. Nuestro equipo logístico ya está preparando tu arsenal para la extracción.
         </p>
 
         <div class="bg-black p-4 mb-4 border border-secondary text-start">
-            <h6 class="text-uppercase text-danger fw-bold mb-3" style="letter-spacing: 1px;"><i class="bi bi-receipt me-2"></i> Detalles de la Operación</h6>
+            <h6 class="text-uppercase text-danger fw-bold mb-3" style="letter-spacing: 1px;">
+                <i class="bi bi-receipt me-2"></i> Detalles de la Operación
+            </h6>
+            
             <div class="d-flex justify-content-between text-white mb-2">
-                <span class="text-muted">Número de Orden:</span>
-                <span class="fw-bold">#000@(Model.Id)</span>
+                <span class="text-muted small">Número de Orden:</span>
+                <span class="fw-bold">#@Model.Id.ToString("D4")</span>
             </div>
+            
             <div class="d-flex justify-content-between text-white mb-2">
-                <span class="text-muted">Fecha de Autorización:</span>
-                <span class="fw-bold">@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</span>
+                <span class="text-muted small">Fecha de Autorización:</span>
+                <span class="fw-bold">@Model.FechaCompra.ToString("dd/MM/yyyy HH:mm")</span>
             </div>
+            
             <div class="d-flex justify-content-between text-white border-top border-secondary pt-2 mt-2">
-                <span class="text-uppercase fw-bold">Total Invertido:</span>
-                <span class="fw-black text-success fs-5">$@Model.Total.ToString("N2") MXN</span>
+                <span class="text-uppercase fw-bold small">Total Invertido:</span>
+                <span class="fw-black text-success fs-5">$@Model.Total.ToString("N2") <small>MXN</small></span>
             </div>
         </div>
 
@@ -40,6 +45,10 @@
                 Ver mis pedidos <i class="bi bi-crosshair ms-2"></i>
             </a>
         </div>
+
+        <p class="text-muted mt-4 mb-0" style="font-size: 0.75rem;">
+            Se ha enviado un reporte detallado a tu correo electrónico registrado.
+        </p>
 
     </div>
 </div>

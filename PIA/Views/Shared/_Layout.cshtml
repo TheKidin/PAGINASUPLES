@@ -6,12 +6,14 @@
 
 @{
     bool alertaEncendida = false;
-    
-    // 🛡️ ESCÁNER INTELIGENTE: Solo escaneamos la base de datos si eres tú (el Administrador)
-    if (SignInManager.IsSignedIn(User) && User.Identity?.Name == "SMUANL2026@hotmail.com")
+    int pedidosNuevos = 0;
+
+    // 🛡️ ESCÁNER INTELIGENTE: Basado en el rango de Administrador
+    if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     {
         // Entramos por Productos y escaneamos todas sus Variantes
         alertaEncendida = _context.Productos.SelectMany(p => p.Variantes).Any(v => v.Stock <= 5);
+        pedidosNuevos = _context.Pedidos.Count(p => p.Estatus == "Pagado y Preparando Arsenal");
     }
 }
 
@@ -63,7 +65,8 @@
                             <a class="nav-link custom-link" asp-controller="Home" asp-action="Catalogo">Catálogo</a>
                         </li>
 
-                        @if (SignInManager.IsSignedIn(User) && User.Identity?.Name == "SMUANL2026@hotmail.com")
+                        @* 🛡️ ESCÁNER DE RANGO PARA LA NAVEGACIÓN *@
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link custom-link text-danger" asp-controller="Productos" asp-action="Index" style="border-bottom: 2px solid var(--accent-color);">
@@ -79,6 +82,20 @@
                                     {
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem; padding: 3px 5px;">
                                             !
+                                        </span>
+                                    }
+                                </a>
+                            </li>
+
+                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center">
+                                <a class="nav-link position-relative custom-link text-success" asp-controller="Pedidos" asp-action="AdminIndex" style="transition: 0.3s;">
+                                    <i class="bi bi-clipboard-data"></i> PEDIDOS MAESTROS
+        
+                                    @* 🚨 NOTIFICACIÓN VISUAL DE PEDIDOS NUEVOS *@
+                                    @if (pedidosNuevos > 0)
+                                    {
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 4px 6px; box-shadow: 0 0 5px red;">
+                                            @pedidosNuevos
                                         </span>
                                     }
                                 </a>

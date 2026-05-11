@@ -6,6 +6,10 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
+using Microsoft.Extensions.Configuration; // 🛡️ Necesario para leer la bóveda secreta
+using System; // Necesario para calcular fechas y horas
+using System.Linq;
+using PIA.Services; // 🛡️ Para el servicio de correos
 
 namespace PIA.Controllers
 {
@@ -13,10 +17,14 @@ namespace PIA.Controllers
     public class CarritoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _config; // 🛡️ Escáner de configuración
+        private readonly EmailSenderService _emailSender; // 🛡️ Servicio de correo
 
-        public CarritoController(ApplicationDbContext context)
+        public CarritoController(ApplicationDbContext context, IConfiguration config, EmailSenderService emailSender)
         {
             _context = context;
+            _config = config;
+            _emailSender = emailSender;
         }
 
         // ==========================================
@@ -107,7 +115,6 @@ namespace PIA.Controllers
                 _context.ItemsCarrito.Remove(item);
                 await _context.SaveChangesAsync();
             }
-            // En vez de devolver JSON, recargamos la página del carrito
             return RedirectToAction("Index");
         }
 
@@ -120,17 +127,11 @@ namespace PIA.Controllers
             var item = await _context.ItemsCarrito.FindAsync(id);
             if (item != null)
             {
-                if (operacion == 1)
-                {
-                    item.Cantidad += 1;
-                }
+                if (operacion == 1) item.Cantidad += 1;
                 else if (operacion == -1)
                 {
                     item.Cantidad -= 1;
-                    if (item.Cantidad <= 0)
-                    {
-                        _context.ItemsCarrito.Remove(item);
-                    }
+                    if (item.Cantidad <= 0) _context.ItemsCarrito.Remove(item);
                 }
 
                 await _context.SaveChangesAsync();
@@ -161,10 +162,8 @@ namespace PIA.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearSesionStripe()
         {
-            // 1. INYECTAR LA LLAVE SECRETA
-            StripeConfiguration.ApiKey = "sk_test_51TSsHcLrhJpcq2a9U0WvpxlJwvlCXpRPRr3PTBCwKua1u5p2UxuI7oQJ1afV5i2OwFkKCCU5NS4dVLi28JhlDDGx00xXfbKQeU";
+            StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
 
-            // 2. IDENTIFICAR AL SOLDADO Y TRAER SU ARSENAL
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var miCarrito = await _context.ItemsCarrito
                 .Include(i => i.Variante)
@@ -172,12 +171,10 @@ namespace PIA.Controllers
                 .Where(i => i.UsuarioId == usuarioId)
                 .ToListAsync();
 
-            // 3. CREAR LA LISTA DETALLADA PARA STRIPE CON IMÁGENES
             var listaDeProductosStripe = new List<SessionLineItemOptions>();
 
             foreach (var item in miCarrito)
             {
-              // URL imagen para qu aparezca en STRIPE
                 var rutaImagen = item.Variante?.Producto?.ImagenUrl ?? "https://dummyimage.com/200x200/cccccc/000000.png&text=Sin+Imagen";
 
                 listaDeProductosStripe.Add(new SessionLineItemOptions
@@ -190,8 +187,6 @@ namespace PIA.Controllers
                         {
                             Name = item.Variante?.Producto?.Nombre ?? "Producto Desconocido",
                             Description = "Sabor: " + (item.Variante?.Sabor ?? "N/A"),
-
-                            //  Aquí se inyecta la URL pública de la imagen
                             Images = new List<string> { rutaImagen }
                         },
                     },
@@ -199,70 +194,136 @@ namespace PIA.Controllers
                 });
             }
 
-            // Validar que no disparen con el carrito vacío
-            if (!listaDeProductosStripe.Any())
-            {
-                return BadRequest(new { error = "Tu carrito está vacío, Comandante." });
-            }
+            if (!listaDeProductosStripe.Any()) return BadRequest(new { error = "Tu carrito está vacío." });
 
-            // Obtenemos la URL exacta de tu radar dinámicamente para que no haya fallos
             var dominio = $"{Request.Scheme}://{Request.Host}";
 
-            // 4. CONFIGURAR LA BÓVEDA CON LA LISTA DETALLADA
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = listaDeProductosStripe,
                 Mode = "payment",
-                SuccessUrl = dominio + "/Carrito/PagoExitoso", // <--- Lo manda a la nueva zona de aterrizaje
-                CancelUrl = dominio + "/Carrito/Index", // <--- Si cancela, vuelve al carrito
+                SuccessUrl = dominio + "/Carrito/PagoExitoso?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = dominio + "/Carrito/Index",
+                ShippingAddressCollection = new SessionShippingAddressCollectionOptions
+                {
+                    AllowedCountries = new List<string> { "MX" },
+                }
             };
 
             var service = new SessionService();
             Session session = service.Create(options);
-
-            // 5. RETORNAR EL GAFETE DE ACCESO A LA VISTA
             return Json(new { id = session.Id });
         }
 
         // ==========================================
-        // 9. ACCIÓN: PROCESAR EL PAGO EXITOSO
+        // 9. ACCIÓN: PROCESAR EL PAGO EXITOSO Y CREAR PEDIDO
         // ==========================================
         [HttpGet]
-        public async Task<IActionResult> PagoExitoso()
+        public async Task<IActionResult> PagoExitoso(string session_id)
         {
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // 1. Traer los productos que el soldado acaba de pagar
             var miCarrito = await _context.ItemsCarrito
                 .Include(i => i.Variante)
+                .ThenInclude(v => v.Producto)
                 .Where(i => i.UsuarioId == usuarioId)
                 .ToListAsync();
 
-            if (miCarrito.Any())
+            if (!miCarrito.Any()) return RedirectToAction("Index", "Home");
+
+            var service = new SessionService();
+            Session stripeSession = service.Get(session_id);
+
+            string direccionEntrega = "Dirección no proporcionada";
+            string ciudadEntrega = "No especificada";
+
+            if (stripeSession.CustomerDetails?.Address != null)
             {
-                // 2. DESCONTAR DEL INVENTARIO
-                foreach (var item in miCarrito)
-                {
-                    if (item.Variante != null)
-                    {
-                      
-                        item.Variante.Stock -= item.Cantidad;
-
-                        // Opcional: Asegurarnos de que el stock no baje de 0
-                        if (item.Variante.Stock < 0) item.Variante.Stock = 0;
-                    }
-                }
-
-                // 3. VACIAR EL CARRITO (Limpiar el arsenal)
-                _context.ItemsCarrito.RemoveRange(miCarrito);
-
-                // 4. GUARDAR TODOS LOS CAMBIOS EN LA BASE DE DATOS
-                await _context.SaveChangesAsync();
+                var address = stripeSession.CustomerDetails.Address;
+                direccionEntrega = $"{address.Line1} {address.Line2}, CP {address.PostalCode}".Trim();
+                ciudadEntrega = $"{address.City}, {address.State}, {address.Country}".Trim();
             }
 
-            // 5. Misión cumplida: Lo mandamos a la pantalla de inicio sano y salvo
-            return RedirectToAction("Index", "Home");
+            // ⏱️ LÓGICA DE ENVÍOS (MTY ANTES DE LA 1 PM)
+            DateTime fechaCalculada = DateTime.Now.AddDays(3);
+            string ubicacionUpper = ciudadEntrega.ToUpper();
+
+            bool esZonaMetro = ubicacionUpper.Contains("MONTERREY") ||
+                               ubicacionUpper.Contains("N.L.") ||
+                               ubicacionUpper.Contains("NL") ||
+                               ubicacionUpper.Contains("APODACA") ||
+                               ubicacionUpper.Contains("GUADALUPE") ||
+                               ubicacionUpper.Contains("SAN NICOLÁS");
+
+            if (esZonaMetro && DateTime.Now.Hour < 13) fechaCalculada = DateTime.Now;
+
+            // 3. CREAR EL PEDIDO
+            var nuevoPedido = new Pedido
+            {
+                UsuarioId = usuarioId,
+                FechaCompra = DateTime.Now,
+                Total = miCarrito.Sum(i => (i.Variante?.Producto?.Precio ?? 0) * i.Cantidad),
+                Direccion = direccionEntrega,
+                Ciudad = ciudadEntrega,
+                Estatus = "Pagado y Preparando Arsenal",
+                FechaEntregaEstimada = fechaCalculada
+            };
+
+            _context.Pedidos.Add(nuevoPedido);
+            await _context.SaveChangesAsync();
+
+            // 4. DETALLES Y STOCK
+            foreach (var item in miCarrito)
+            {
+                var detalle = new DetallePedido
+                {
+                    PedidoId = nuevoPedido.Id,
+                    VarianteProductoId = item.Variante.Id,
+                    Cantidad = item.Cantidad,
+                    Precio = item.Variante?.Producto?.Precio ?? 0
+                };
+                _context.DetallesPedido.Add(detalle);
+
+                if (item.Variante != null)
+                {
+                    item.Variante.Stock -= item.Cantidad;
+                    if (item.Variante.Stock < 0) item.Variante.Stock = 0;
+                }
+            }
+
+            // 5. VACIAR CARRITO
+            _context.ItemsCarrito.RemoveRange(miCarrito);
+
+            // 6. GUARDAR CAMBIOS FINALES
+            await _context.SaveChangesAsync();
+
+            // 📨 7. LANZAR TRANSMISIÓN AL SOLDADO (EMAIL)
+            string correoCliente = User.Identity?.Name ?? "";
+
+            if (!string.IsNullOrEmpty(correoCliente))
+            {
+                string asunto = $"Misión Confirmada: Orden #{nuevoPedido.Id.ToString("D4")} - SMUANL Performance";
+                string html = $@"
+                    <div style='background-color:#050505; color:#ffffff; font-family:Arial, sans-serif; padding:30px; border: 2px solid #222;'>
+                        <h2 style='color:#dc3545; font-style:italic; letter-spacing:2px;'>SMUANL PERFORMANCE</h2>
+                        <h3 style='border-bottom: 1px solid #333; padding-bottom: 10px;'>REPORTE DE OPERACIÓN LOGÍSTICA</h3>
+                        <p>Soldado, tu despliegue de armamento ha sido autorizado y está siendo procesado.</p>
+                        
+                        <p><strong>NÚMERO DE ORDEN:</strong> #{nuevoPedido.Id.ToString("D4")}</p>
+                        <p><strong>TOTAL ABONADO:</strong> ${nuevoPedido.Total.ToString("N2")} MXN</p>
+                        <p><strong>COORDENADAS DE ATERRIZAJE:</strong> {nuevoPedido.Direccion}, {nuevoPedido.Ciudad}</p>
+                        <p><strong>FECHA ESTIMADA DE IMPACTO:</strong> {nuevoPedido.FechaEntregaEstimada.ToString("dd MMM, yyyy")}</p>
+                        
+                        <p style='margin-top:20px; font-size:12px; color:#aaa;'>Mantente alerta a los radares para futuras actualizaciones del estatus.</p>
+                    </div>";
+
+                // Enviamos en segundo plano para no demorar la respuesta
+                _ = _emailSender.EnviarCorreoAsync(correoCliente, asunto, html);
+            }
+
+            // 8. REDIRECCIÓN FINAL
+            return RedirectToAction("Index", "Pedidos");
         }
     }
 }

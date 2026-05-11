@@ -11,11 +11,21 @@
         $@totalEstimado.ToString("N2")
     </span>
 </div>
-                
+
 <div class="text-uppercase" style="color: var(--text-muted); font-size: 0.65rem; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 10px;">
     Cálculo final de envío e impuestos se procesará en el pago.
 </div>
 
-<a asp-controller="Pedidos" asp-action="Checkout" class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-3 d-flex justify-content-center align-items-center" style="letter-spacing: 2px;">
-    <i class="bi bi-shield-lock-fill me-2"></i> PROCEDER AL PAGO TÁCTICO
-</a>
+@* 🚀 CAMBIO TÁCTICO: Redirigimos al cuartel principal del carrito *@
+@if (totalEstimado > 0)
+{
+    <a asp-controller="Carrito" asp-action="Index" class="btn btn-danger w-100 rounded-0 fw-bold text-uppercase py-3 d-flex justify-content-center align-items-center mt-3" style="letter-spacing: 2px;">
+        <i class="bi bi-cart-check-fill me-2"></i> IR AL ARSENAL Y PAGAR
+    </a>
+}
+else
+{
+    <button class="btn btn-secondary w-100 rounded-0 fw-bold text-uppercase py-3 d-flex justify-content-center align-items-center mt-3 disabled" style="letter-spacing: 2px;">
+        <i class="bi bi-cart-x me-2"></i> ARSENAL VACÍO
+    </button>
+}
