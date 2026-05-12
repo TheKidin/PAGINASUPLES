@@ -68,6 +68,8 @@
                                     <td class="py-4 text-center">
                                         <form asp-action="Eliminar" asp-controller="Carrito" method="post">
                                             <input type="hidden" name="id" value="@item.Id" />
+                                            @* 🛡️ SEÑAL DE IDENTIFICACIÓN: Avisa que disparamos desde la base principal *@
+                                            <input type="hidden" name="origen" value="carrito_principal" />
                                             <button type="submit" class="btn btn-link text-muted hover-danger p-0" title="Remover del arsenal">
                                                 <i class="bi bi-trash3-fill fs-5"></i>
                                             </button>
@@ -120,7 +122,6 @@
                 }
                 else
                 {
-                    @* 🚀 AQUÍ ESTÁ EL CAMBIO: Ya no es un enlace a Checkout, es un botón con ID *@
                     <button id="btnPagarStripe" class="btn btn-danger btn-lg rounded-0 w-100 fw-black py-3 text-uppercase btn-cart-premium" style="letter-spacing: 2px;">
                         <i class="bi bi-shield-lock-fill me-2"></i> PROCEDER AL PAGO
                     </button>
@@ -134,8 +135,6 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         // 🔑 Obtenemos la llave pública directo de appsettings.json
-        // NOTA: Asegúrate de que en tu appsettings.json se llame "PublishableKey" dentro de "Stripe".
-        // Si se llama diferente, ajusta el nombre aquí abajo.
         var stripePubKey = '@Configuration["Stripe:PublishableKey"]';
         var stripe = Stripe(stripePubKey);
 

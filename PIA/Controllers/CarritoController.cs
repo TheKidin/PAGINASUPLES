@@ -109,7 +109,7 @@ namespace PIA.Controllers
         // 5. ACCIÓN: ELIMINAR DEL ARSENAL
         // ==========================================
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id)
+        public async Task<IActionResult> Eliminar(int id, string origen = "")
         {
             var item = await _context.ItemsCarrito.FindAsync(id);
             if (item != null)
@@ -117,7 +117,16 @@ namespace PIA.Controllers
                 _context.ItemsCarrito.Remove(item);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Index");
+
+            // 🛡️ BIFURCACIÓN TÁCTICA:
+            // Si la orden viene del Carrito Principal, recargamos la página completa.
+            if (origen == "carrito_principal")
+            {
+                return RedirectToAction("Index");
+            }
+
+            // Si viene del Mini Carrito lateral (JavaScript), mandamos un 'OK' silencioso.
+            return Json(new { success = true });
         }
 
         // ==========================================
