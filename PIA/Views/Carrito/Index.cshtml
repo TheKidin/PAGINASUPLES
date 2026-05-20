@@ -13,88 +13,108 @@
             <h2 class="fw-black text-uppercase italic mb-0" style="color: var(--text-main); letter-spacing: 2px;">Tu Arsenal</h2>
             <p class="text-danger fw-bold small text-uppercase mb-0" style="letter-spacing: 1px;">STATUS: REVISIÓN DE INVENTARIO</p>
         </div>
-        <a asp-controller="Home" asp-action="Catalogo" class="btn btn-outline-light btn-sm rounded-0 fw-bold text-uppercase" style="letter-spacing: 1px;">
+        <a asp-controller="Home" asp-action="Catalogo" class="btn btn-outline-light btn-sm rounded-0 fw-bold text-uppercase d-none d-sm-inline-block" style="letter-spacing: 1px;">
             <i class="bi bi-arrow-left me-2"></i> Seguir Explorando
         </a>
     </div>
 
     <div class="row">
         <div class="col-lg-8 mb-4">
-            <div class="table-responsive" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
-                <table class="table table-dark table-borderless table-hover mb-0 align-middle">
-                    <thead style="border-bottom: 2px solid var(--accent-color);">
-                        <tr class="text-uppercase small" style="letter-spacing: 1px; color: var(--text-muted);">
-                            <th scope="col" class="py-3 ps-4">Suplemento</th>
-                            <th scope="col" class="py-3 text-center">Precio</th>
-                            <th scope="col" class="py-3 text-center">Cantidad</th>
-                            <th scope="col" class="py-3 text-center">Subtotal</th>
-                            <th scope="col" class="py-3 text-center">Remover</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Any())
-                        {
-                            @foreach (var item in Model)
-                            {
-                                decimal precioUnitario = item.Variante?.Producto?.Precio ?? 0;
-                                totalEstimado += (precioUnitario * item.Cantidad);
+            @* 🚀 AQUÍ APLICAMOS LA NUEVA TÁCTICA: Adiós a la <table>, hola al Grid Flexible *@
+            <div class="cart-items-wrapper" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
+                
+                @* ENCABEZADO: Solo visible en pantallas de computadora (d-md-flex) *@
+                <div class="d-none d-md-flex row mx-0 py-3 text-uppercase small fw-bold align-items-center" style="border-bottom: 2px solid var(--accent-color); color: var(--text-muted); letter-spacing: 1px;">
+                    <div class="col-md-5 ps-4">Suplemento</div>
+                    <div class="col-md-2 text-center">Precio</div>
+                    <div class="col-md-2 text-center">Cantidad</div>
+                    <div class="col-md-2 text-center">Subtotal</div>
+                    <div class="col-md-1 text-center"></div>
+                </div>
 
-                                <tr>
-                                    <td class="py-4 ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <div style="width: 60px; height: 60px; background-color: #141414; border: 1px solid var(--border-color);" class="d-flex justify-content-center align-items-center p-1 me-3">
-                                                @if (item.Variante?.Producto == null || string.IsNullOrEmpty(item.Variante.Producto.ImagenUrl))
-                                                {
-                                                    <i class="bi bi-box-seam fs-3 text-secondary"></i>
-                                                }
-                                                else
-                                                {
-                                                    <img src="@item.Variante.Producto.ImagenUrl" class="img-fluid" style="object-fit: contain; max-height: 100%;" />
-                                                }
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-bold text-uppercase" style="color: var(--text-main); letter-spacing: 1px;">
-                                                    @(item.Variante?.Producto?.Nombre ?? "Suplemento Desconocido")
-                                                </h6>
-                                                <small style="color: var(--text-muted);">Sabor: @(item.Variante?.Sabor ?? "N/A")</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 text-center fw-bold text-white">$@precioUnitario.ToString("N2")</td>
-                                    <td class="py-4 text-center">
-                                        <span class="badge bg-dark border border-secondary px-3 py-2 rounded-0 fs-6">@item.Cantidad</span>
-                                    </td>
-                                    <td class="py-4 text-center text-danger fw-bold">$@((precioUnitario * item.Cantidad).ToString("N2"))</td>
-                                    <td class="py-4 text-center">
-                                        <form asp-action="Eliminar" asp-controller="Carrito" method="post">
-                                            <input type="hidden" name="id" value="@item.Id" />
-                                            @* 🛡️ SEÑAL DE IDENTIFICACIÓN: Avisa que disparamos desde la base principal *@
-                                            <input type="hidden" name="origen" value="carrito_principal" />
-                                            <button type="submit" class="btn btn-link text-muted hover-danger p-0" title="Remover del arsenal">
-                                                <i class="bi bi-trash3-fill fs-5"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="5" class="text-center py-5">
-                                    <i class="bi bi-cart-x text-muted mb-3" style="font-size: 3rem;"></i>
-                                    <h5 class="fw-bold text-uppercase text-muted">Tu arsenal está vacío</h5>
-                                    <a asp-controller="Home" asp-action="Catalogo" class="btn btn-danger btn-sm rounded-0 mt-3 fw-bold text-uppercase">Ir al catálogo</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                @* CUERPO DEL INVENTARIO *@
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        decimal precioUnitario = item.Variante?.Producto?.Precio ?? 0;
+                        totalEstimado += (precioUnitario * item.Cantidad);
+
+                        <div class="row mx-0 py-4 align-items-center" style="border-bottom: 1px solid #222;">
+                            
+                            @* 1. Columna del Producto *@
+                            <div class="col-12 col-md-5 mb-3 mb-md-0 ps-md-4">
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 70px; height: 70px; background-color: #141414; border: 1px solid var(--border-color);" class="d-flex justify-content-center align-items-center p-1 me-3 flex-shrink-0">
+                                        @if (item.Variante?.Producto == null || string.IsNullOrEmpty(item.Variante.Producto.ImagenUrl))
+                                        {
+                                            <i class="bi bi-box-seam fs-3 text-secondary"></i>
+                                        }
+                                        else
+                                        {
+                                            <img src="@item.Variante.Producto.ImagenUrl" class="img-fluid" style="object-fit: contain; max-height: 100%;" />
+                                        }
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold text-uppercase lh-sm" style="color: var(--text-main); letter-spacing: 1px; font-size: 0.9rem;">
+                                            @(item.Variante?.Producto?.Nombre ?? "Suplemento Desconocido")
+                                        </h6>
+                                        <small class="mt-1 d-block" style="color: var(--text-muted); font-size: 0.8rem;">Sabor: @(item.Variante?.Sabor ?? "N/A")</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @* 2. Columna Precio (Se apila en celular) *@
+                            <div class="col-4 col-md-2 text-md-center">
+                                <span class="d-md-none text-muted small d-block mb-1 text-uppercase fw-bold" style="font-size: 0.7rem;">Precio</span>
+                                <span class="fw-bold text-white">$@precioUnitario.ToString("N2")</span>
+                            </div>
+
+                            @* 3. Columna Cantidad (Se apila en celular) *@
+                            <div class="col-4 col-md-2 text-center">
+                                <span class="d-md-none text-muted small d-block mb-1 text-uppercase fw-bold" style="font-size: 0.7rem;">Cant.</span>
+                                <span class="badge bg-dark border border-secondary px-3 py-2 rounded-0 fs-6">@item.Cantidad</span>
+                            </div>
+
+                            @* 4. Columna Subtotal (Se apila en celular) *@
+                            <div class="col-4 col-md-2 text-md-center text-end">
+                                <span class="d-md-none text-muted small d-block mb-1 text-uppercase fw-bold" style="font-size: 0.7rem;">Subtotal</span>
+                                <span class="text-danger fw-bold">$@((precioUnitario * item.Cantidad).ToString("N2"))</span>
+                            </div>
+
+                            @* 5. Columna Remover (Se pone abajo del todo en celular) *@
+                            <div class="col-12 col-md-1 text-end text-md-center mt-3 mt-md-0 border-top border-secondary pt-3 pt-md-0 border-md-0">
+                                <form asp-action="Eliminar" asp-controller="Carrito" method="post" class="m-0">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <input type="hidden" name="origen" value="carrito_principal" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-0 border-0" title="Remover del arsenal">
+                                        <i class="bi bi-trash3-fill fs-5"></i>
+                                        <span class="d-md-none ms-2 fw-bold text-uppercase">Remover Objeto</span>
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-cart-x text-muted mb-3" style="font-size: 3rem;"></i>
+                        <h5 class="fw-bold text-uppercase text-muted">Tu arsenal está vacío</h5>
+                        <a asp-controller="Home" asp-action="Catalogo" class="btn btn-danger btn-sm rounded-0 mt-3 fw-bold text-uppercase">Ir al catálogo</a>
+                    </div>
+                }
             </div>
+            
+            @* Botón de Seguir Explorando (Versión Celular - Se muestra abajo del carrito) *@
+            <a asp-controller="Home" asp-action="Catalogo" class="btn btn-outline-light btn-sm rounded-0 fw-bold text-uppercase d-sm-none w-100 mt-3" style="letter-spacing: 1px;">
+                <i class="bi bi-arrow-left me-2"></i> Seguir Explorando
+            </a>
         </div>
 
         <div class="col-lg-4">
-            <div class="p-4" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
+            <div class="p-4 mt-4 mt-lg-0" style="border: 1px solid var(--border-color); background-color: var(--surface-dark);">
                 <h5 class="fw-black text-uppercase italic mb-4" style="color: var(--text-main); letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 15px;">
                     Resumen Táctico
                 </h5>
@@ -134,18 +154,15 @@
 @section Scripts {
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        // 🔑 Obtenemos la llave pública directo de appsettings.json
         var stripePubKey = '@Configuration["Stripe:PublishableKey"]';
         var stripe = Stripe(stripePubKey);
 
         document.getElementById('btnPagarStripe')?.addEventListener('click', function () {
         var btn = this;
             
-        // Efecto visual de despliegue
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> CONECTANDO...';
         btn.disabled = true;
 
-        // Disparamos la señal a tu servidor para crear la sesión de pago
         fetch('/Carrito/CrearSesionStripe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
@@ -159,7 +176,6 @@
         btn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> PROCEDER AL PAGO';
         btn.disabled = false;
         } else {
-        // Luz verde: Stripe nos lleva a su bóveda
         return stripe.redirectToCheckout({ sessionId: session.id });
         }
         })
